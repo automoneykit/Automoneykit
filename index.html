@@ -8,220 +8,90 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #ffffff;
-      color: #000;
       margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #00555A;
-      color: white;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    header h1 {
-      font-size: 32px;
-      margin: 0;
-      line-height: 1.4;
-    }
-    .container {
-      max-width: 720px;
-      margin: 0 auto;
       padding: 20px;
+      background-color: #f4f4f4;
+      color: #333;
     }
-    label {
-      font-size: 18px;
-      font-weight: bold;
-    }
-    select {
-      width: 100%;
-      font-size: 16px;
+    h1 { text-align: center; }
+    select, button {
+      margin: 10px;
       padding: 10px;
-      margin: 10px 0 20px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .subtext {
-      font-size: 16px;
-      color: #444;
-      margin-bottom: 10px;
-    }
-    .prompt-title {
-      font-size: 18px;
-      font-weight: bold;
-      margin-top: 30px;
-      margin-bottom: 10px;
+      font-size: 1em;
     }
     .prompt-box {
-      background-color: #DFF0D8;
-      border-left: 6px solid #1BA94C;
-      padding: 16px;
-      border-radius: 6px;
-      margin-bottom: 10px;
-      cursor: pointer;
-      position: relative;
+      margin: 10px 0;
+      padding: 10px;
+      background: #fff;
+      border-left: 5px solid #4CAF50;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-    .copied-msg {
-      position: absolute;
-      right: 10px;
-      top: 10px;
-      background-color: #FF652F;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 4px;
-      display: none;
-      font-size: 14px;
-    }
-    .btn-row {
-      text-align: center;
-      margin-top: 30px;
-      display: none;
-    }
-    .btn-row button {
-      padding: 12px 24px;
-      margin: 0 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      background-color: #FF652F;
-      color: white;
-    }
-    .upgrade-warning {
-      color: red;
-      margin-top: 10px;
+    .copied {
+      color: green;
       font-weight: bold;
     }
   </style>
-  <script>
-    const tierHierarchy = ["basic", "premium", "elite", "master"];
-    const userTierAccess = "basic";
-    let promptData = {};
-
-    document.addEventListener("DOMContentLoaded", async () => {
-      try {
-        const response = await fetch("automoneykit_Basic_Prompts.json");
-        promptData = await response.json();
-        console.log("Prompts loaded:", promptData);
-      } catch (err) {
-        console.error("Failed to load prompts:", err);
-      }
-    });
-
-    function handleTierChange() {
-      const tier = document.getElementById("tier").value;
-      const userLevelIndex = tierHierarchy.indexOf(userTierAccess);
-      const selectedLevelIndex = tierHierarchy.indexOf(tier);
-
-      document.getElementById("promptTitle").style.display = "none";
-      document.getElementById("promptBoxContainer").innerHTML = "";
-      document.getElementById("aiButtons").style.display = "none";
-
-      if (selectedLevelIndex > userLevelIndex) {
-        document.getElementById("tierWarning").style.display = "block";
-        document.getElementById("categorySection").style.display = "none";
-        document.getElementById("styleSection").style.display = "none";
-      } else {
-        document.getElementById("tierWarning").style.display = "none";
-        document.getElementById("categorySection").style.display = "block";
-      }
-    }
-
-    function loadStyles() {
-      const category = document.getElementById("category").value;
-      const styleDropdown = document.getElementById("style");
-
-      styleDropdown.innerHTML = '<option value="">-- Choose Style --</option>';
-      if (promptData[category]) {
-        Object.keys(promptData[category]).forEach(style => {
-          const option = document.createElement("option");
-          option.value = style;
-          option.textContent = style;
-          styleDropdown.appendChild(option);
-        });
-        document.getElementById("styleSection").style.display = "block";
-      }
-    }
-
-    function loadPrompts() {
-      const tier = document.getElementById("tier").value;
-      const category = document.getElementById("category").value;
-      const style = document.getElementById("style").value;
-      const container = document.getElementById("promptBoxContainer");
-      const promptTitle = document.getElementById("promptTitle");
-      const aiButtons = document.getElementById("aiButtons");
-
-      container.innerHTML = "";
-      if (promptData[category] && promptData[category][style] && promptData[category][style][tier]) {
-        promptData[category][style][tier].forEach(prompt => {
-          const div = document.createElement("div");
-          div.className = "prompt-box";
-          div.innerHTML = prompt + '<div class="copied-msg">Copied!</div>';
-          div.onclick = function () {
-            navigator.clipboard.writeText(prompt).then(() => {
-              const msg = div.querySelector('.copied-msg');
-              msg.style.display = "block";
-              setTimeout(() => msg.style.display = "none", 1500);
-            });
-          };
-          container.appendChild(div);
-        });
-        promptTitle.style.display = "block";
-        aiButtons.style.display = "block";
-      }
-    }
-  </script>
 </head>
 <body>
-  <header>
-    <h1>AutoMoneyKit Prompt Launcher</h1>
-  </header>
-  <main class="container">
-    <label for="tier">Select Your Prompt Level:</label>
-    <select id="tier" onchange="handleTierChange()">
-      <option value="">-- Choose Access Tier --</option>
-      <option value="basic">Basic</option>
-      <option value="premium">Premium</option>
-      <option value="elite">Elite</option>
-      <option value="master">Master</option>
+  <h1>AutoMoneyKit Prompt Launcher</h1>
+  <div>
+    <label for="category">Please select a category to get started:</label><br/>
+    <select id="category">
+      <option value="">-- Select Category --</option>
     </select>
-    <div id="tierWarning" class="upgrade-warning" style="display:none;">
-      You haven’t unlocked this tier yet. 
-      <button onclick="alert('Redirect to Upgrade Page')">Upgrade</button>
-    </div>
+  </div>
+  <div>
+    <label for="style">Now select a prompt style to view your prompt:</label><br/>
+    <select id="style">
+      <option value="">-- Select Style --</option>
+    </select>
+  </div>
+  <div id="prompts"></div>
 
-    <div id="categorySection" style="display:none;">
-      <label for="category">Select Category:</label>
-      <div class="subtext">Choose the type of content this prompt is for.</div>
-      <select id="category" onchange="loadStyles()">
-        <option value="">-- Choose Category --</option>
-        <option value="viral_hooks">Viral Hooks – All Platforms</option>
-        <option value="problem_solution">Problem/Solution Templates</option>
-        <option value="sales_copy">Sales Page Copy Prompts</option>
-        <option value="tiktok_scripts">TikTok + Reels Video Scripts</option>
-        <option value="instagram">Instagram Caption + Carousel Templates</option>
-        <option value="email_subjects">Email Subject Lines + Openers</option>
-      </select>
-    </div>
-
-    <div id="styleSection" style="display:none;">
-      <label for="style">Select Prompt Style:</label>
-      <div class="subtext">Choose how you want the ad to be structured or feel.</div>
-      <select id="style" onchange="loadPrompts()">
-        <option value="">-- Choose Style --</option>
-      </select>
-    </div>
-
-    <div class="prompt-title" id="promptTitle" style="display:none;">
-      Click the prompt to copy it. Then open your AI tool and paste it.
-    </div>
-    <div id="promptBoxContainer"></div>
-
-    <div class="btn-row" id="aiButtons">
-      <button onclick="window.open('https://chat.openai.com/', '_blank')">Open in ChatGPT</button>
-      <button onclick="window.open('https://claude.ai/', '_blank')">Open in Claude</button>
-      <button onclick="location.reload()">Reset</button>
-    </div>
-  </main>
+  <script>
+    let promptsData = {};
+    fetch('automoneykit_Basic_Prompts.json')
+      .then(res => res.json())
+      .then(data => {
+        promptsData = data;
+        const categories = Object.keys(data);
+        const categorySelect = document.getElementById('category');
+        categories.forEach(cat => {
+          const opt = document.createElement('option');
+          opt.value = cat;
+          opt.innerText = cat.replace(/_/g, ' ');
+          categorySelect.appendChild(opt);
+        });
+        categorySelect.addEventListener('change', () => {
+          const styles = Object.keys(promptsData[categorySelect.value] || {});
+          const styleSelect = document.getElementById('style');
+          styleSelect.innerHTML = '<option value="">-- Select Style --</option>';
+          styles.forEach(style => {
+            const opt = document.createElement('option');
+            opt.value = style;
+            opt.innerText = style;
+            styleSelect.appendChild(opt);
+          });
+        });
+        document.getElementById('style').addEventListener('change', () => {
+          const cat = categorySelect.value;
+          const style = document.getElementById('style').value;
+          const promptBox = document.getElementById('prompts');
+          promptBox.innerHTML = '';
+          if (promptsData[cat] && promptsData[cat][style] && promptsData[cat][style].basic) {
+            promptsData[cat][style].basic.forEach((prompt, index) => {
+              const box = document.createElement('div');
+              box.className = 'prompt-box';
+              box.innerHTML = `
+                <div>${prompt}</div>
+                <button onclick="navigator.clipboard.writeText(\`${prompt}\`).then(() => this.nextElementSibling.style.display='inline')">Copy</button>
+                <span class="copied" style="display:none;">Copied!</span>
+              `;
+              promptBox.appendChild(box);
+            });
+          }
+        });
+      });
+  </script>
 </body>
 </html>
