@@ -2,84 +2,60 @@
   "viral_hooks": {
     "shock": {
       "basic": [
-        "Create a viral hook that highlights [INSERT HERE – ie. “your product or service”] by showing how it helps with [INSERT HERE – ie. “a common problem like ‘never sticking to habits’ or ‘feeling overwhelmed’”]. Use simple, relatable language and include [INSERT HERE – ie. “a call-to-action like ‘Tap the link’, ‘Try this now’, or ‘Watch how it works’”].",
-        "Make a bold, scroll-stopping hook for [INSERT HERE – ie. “your offer”] that starts with [INSERT HERE – ie. “a shocking fact or stat”], followed by [INSERT HERE – ie. “a benefit that solves the pain”]. Finish with a CTA like [INSERT HERE – ie. “Tap to see” or “Check this out”]."
-      ]
-    },
-    "comparison": {
-      "basic": [
-        "Write a hook that compares [INSERT HERE – ie. “your solution”] to [INSERT HERE – ie. “a common alternative or problem”]. Start with ‘Most people try ___, but what if ___?’ and end with a CTA like [INSERT HERE – ie. “Try this instead”].",
-        "Create a comparison-style ad that positions [INSERT HERE – ie. “your product”] as the better choice over [INSERT HERE – ie. “an outdated or ineffective option”]. Add a quick CTA like [INSERT HERE – ie. “Tap to learn why it wins”]."
-      ]
-    }
-  },
-  "problem_solution": {
-    "direct": {
-      "basic": [
-        "Write a prompt that introduces a common problem like [INSERT HERE – ie. “burnout”], then shows how [INSERT HERE – ie. “your service”] solves it in a simple way. Add a CTA like [INSERT HERE – ie. “Watch this” or “See how it works”].",
-        "Describe a real struggle (ie. [INSERT HERE – ie. “can’t stay consistent with fitness”]) and follow it up with a simple fix using [INSERT HERE – ie. “your product or method”]. CTA: [INSERT HERE – ie. “Try this instead”]."
+        "Create a viral hook that highlights [INSERT HERE \u2013 ie. \u201cyour product or service\u201d] by showing how it helps with [INSERT HERE \u2013 ie. \u201ca common frustration like \u2018wasting time scrolling\u2019\u201d]. Use simple, relatable language and include [INSERT HERE \u2013 ie. \u201ca call-to-action like \u2018Tap to see why\u2019 or \u2018This will surprise you\u2019\u201d].",
+        "Write a shock-style viral hook for [INSERT HERE \u2013 ie. \u201cbusy professionals\u201d] who struggle with [INSERT HERE \u2013 ie. \u201ckeeping up with tasks\u201d]. Add [INSERT HERE \u2013 ie. \u201ca call-to-action like \u2018You\u2019ll never work the same again\u2019\u201d].",
+        "Craft a jaw-dropping viral hook for [INSERT HERE \u2013 ie. \u201cfreelancers\u201d] by exposing [INSERT HERE \u2013 ie. \u201ca secret that saves hours of work\u201d]. End with [INSERT HERE \u2013 ie. \u201ca line like \u2018Tap if you\u2019ve ever felt this\u2019\u201d].",
+        "Make a short shocking hook that grabs attention by revealing [INSERT HERE \u2013 ie. \u201ca common myth people believe\u201d] about [INSERT HERE \u2013 ie. \u201cyour niche or product\u201d]. Include [INSERT HERE \u2013 ie. \u201ca direct call-to-action\u201d].",
+        "Hook your audience fast by starting with [INSERT HERE \u2013 ie. \u201ca shocking question like \u2018Why are you still broke?\u2019\u201d] and then tease the solution in [INSERT HERE \u2013 ie. \u201cone bold sentence\u201d]."
       ]
     },
     "personal_story": {
       "basic": [
-        "Tell a story that starts with [INSERT HERE – ie. “a relatable pain point”], leads into [INSERT HERE – ie. “what you discovered or created”], and ends with [INSERT HERE – ie. “how things got better + what others should do now”].",
-        "Share a quick before/after experience of [INSERT HERE – ie. “someone like your target buyer”]. Explain the shift from frustration to success using [INSERT HERE – ie. “your product or framework”]. CTA: [INSERT HERE – ie. “You can do this too”]."
+        "Write a personal story hook that shows [INSERT HERE \u2013 ie. \u201chow you went from struggling with X to achieving Y using your product or service\u201d]. Keep it emotional and short.",
+        "Create a personal story intro that starts with [INSERT HERE \u2013 ie. \u201ca low point in your journey\u201d] and ends with [INSERT HERE \u2013 ie. \u201ca line that hints at success or breakthrough\u201d].",
+        "Share a quick story about [INSERT HERE \u2013 ie. \u201csomething that almost made you quit\u201d] and explain how [INSERT HERE \u2013 ie. \u201cyou overcame it with this tool/system\u201d].",
+        "Start a personal hook with \u2018I used to...\u2019 and talk about [INSERT HERE \u2013 ie. \u201ca relatable pain\u201d] and how [INSERT HERE \u2013 ie. \u201cit changed after trying this solution\u201d].",
+        "Use a real moment where [INSERT HERE \u2013 ie. \u201cyou felt lost or stuck\u201d] and what changed. Keep it raw, short, and end with [INSERT HERE \u2013 ie. \u201ca teaser about the result\u201d]."
+      ]
+    }
+  },
+  "problem_solution": {
+    "shock": {
+      "basic": [
+        "Describe a painful problem like [INSERT HERE \u2013 ie. \u201cnever having enough time\u201d], then immediately shock them with [INSERT HERE \u2013 ie. \u201ca one-line solution they didn\u2019t expect\u201d].",
+        "Create a quick ad that starts with \u2018Most people do this wrong...\u2019 and explain [INSERT HERE \u2013 ie. \u201cthe typical mistake\u201d], then show [INSERT HERE \u2013 ie. \u201cyour surprising fix\u201d].",
+        "Write a problem-solution hook where you say \u2018Tired of X?\u2019 and follow it with [INSERT HERE \u2013 ie. \u201can unexpected but easy trick\u201d] that fixes it.",
+        "Hook the viewer by revealing [INSERT HERE \u2013 ie. \u201ca little-known stat or fact\u201d] about the problem, then say \u2018That\u2019s why we created...\u2019 and introduce your product.",
+        "Use \u2018I used to struggle with...\u2019 as the opener, then share [INSERT HERE \u2013 ie. \u201ca surprisingly fast fix\u201d] your product offers."
+      ]
+    },
+    "comparison": {
+      "basic": [
+        "Write a side-by-side comparison that shows [INSERT HERE \u2013 ie. \u201cthe old way vs the new way\u201d] in your niche. Make it bold and clear.",
+        "Show how your product stacks up by writing a quick compare ad: [INSERT HERE \u2013 ie. \u201cExpensive agency vs. your AI tool\u201d]. End with [INSERT HERE \u2013 ie. \u201ca call-to-action like \u2018Which one would you choose?\u2019\u201d].",
+        "Create a split-screen idea: [INSERT HERE \u2013 ie. \u201cDoing it manually vs. using your solution\u201d]. Add [INSERT HERE \u2013 ie. \u201csimple benefits under each\u201d].",
+        "Hook viewers by saying \u2018Before using this...\u2019 and \u2018After using this...\u2019 \u2013 keep the contrast strong and fast.",
+        "Build a quick visual ad concept comparing [INSERT HERE \u2013 ie. \u201c2 paths or outcomes\u201d] if someone uses your offer vs. doesn\u2019t."
       ]
     }
   },
   "sales_copy": {
-    "framework": {
+    "direct": {
       "basic": [
-        "Write a short sales block using PAS: Problem [INSERT HERE – ie. “what keeps them stuck”], Agitation [INSERT HERE – ie. “why that hurts more than they think”], Solution [INSERT HERE – ie. “your product as relief”].",
-        "Build a sales blurb using AIDA: Attention [INSERT HERE – ie. “shocking line or stat”], Interest [INSERT HERE – ie. “relatable story or insight”], Desire [INSERT HERE – ie. “what they’ll gain”], Action [INSERT HERE – ie. “what to click or do”]."
+        "Write a sales sentence that speaks directly to [INSERT HERE \u2013 ie. \u201cfreelancers who feel stuck\u201d] and promises [INSERT HERE \u2013 ie. \u201ca fast, specific result\u201d].",
+        "Hook buyers with a bold offer: \u2018If you [INSERT HERE \u2013 ie. \u201cneed more leads fast\u201d], then this is for you.\u2019",
+        "Start your sales copy with \u2018Imagine this...\u2019 and describe [INSERT HERE \u2013 ie. \u201cthe dream outcome\u201d]. Then explain how to get it.",
+        "Write a bold claim like \u2018The fastest way to [INSERT HERE \u2013 ie. \u201cbuild your side hustle\u201d]\u2019 and support it with [INSERT HERE \u2013 ie. \u201cone key feature\u201d].",
+        "Use a \u2018You\u2019re not alone...\u2019 line that leads into [INSERT HERE \u2013 ie. \u201cthe main benefit of your product or offer\u201d]."
       ]
     },
-    "value_stack": {
-      "basic": [
-        "List 3 things they get when they buy [INSERT HERE – ie. “your product”], each framed as a huge benefit. End with a short CTA [INSERT HERE – ie. “Start now, risk-free”].",
-        "Write a quick summary showing what makes [INSERT HERE – ie. “your offer”] different. Use phrases like ‘Unlike ___, this actually ___’ and finish with [INSERT HERE – ie. “a next-step CTA”]."
-      ]
-    }
-  },
-  "tiktok_scripts": {
-    "hook_to_demo": {
-      "basic": [
-        "Write a TikTok script that starts with a bold question like [INSERT HERE – ie. “What’s the fastest way to ___?”], then shows [INSERT HERE – ie. “how your product solves it in real time”].",
-        "Start with [INSERT HERE – ie. “a dramatic first line like ‘No one talks about this…’”], then walk through [INSERT HERE – ie. “your 3-step method or example”]. End with CTA: [INSERT HERE – ie. “Try it out”]."
-      ]
-    },
-    "reaction_trigger": {
-      "basic": [
-        "Create a script that opens with [INSERT HERE – ie. “something that makes people say ‘wait what?’”], then reveal [INSERT HERE – ie. “a truth or method your product shows”].",
-        "Make a TikTok where you act out [INSERT HERE – ie. “a frustrating moment”], then cut to how [INSERT HERE – ie. “your tool or guide”] solves it. CTA: [INSERT HERE – ie. “Test this instead”]."
-      ]
-    }
-  },
-  "instagram": {
-    "carousel": {
-      "basic": [
-        "Create an Instagram carousel: Slide 1 = [INSERT HERE – ie. “shock or call-out line”], Slide 2-4 = [INSERT HERE – ie. “steps or insight”], Slide 5 = CTA like [INSERT HERE – ie. “DM me ‘info’” or “Check the link in bio”].",
-        "Write carousel slides showing ‘3 mistakes to avoid when ___’ using [INSERT HERE – ie. “something your product fixes”]. End with Slide 5 CTA: [INSERT HERE – ie. “Tap save” or “Try this method”]."
-      ]
-    },
-    "caption_hack": {
-      "basic": [
-        "Write a short caption that hooks with [INSERT HERE – ie. “a controversial or surprising statement”], explains [INSERT HERE – ie. “how your offer relates”], and ends with [INSERT HERE – ie. “a quick CTA”].",
-        "Create a relatable caption that speaks directly to [INSERT HERE – ie. “a specific group or feeling, like ‘new moms’ or ‘tired coaches’”]. Include [INSERT HERE – ie. “what to do next”]."
-      ]
-    }
-  },
-  "email_subjects": {
     "curiosity": {
       "basic": [
-        "Write an email subject that teases [INSERT HERE – ie. “a strange discovery, tip, or lesson”] without revealing the full answer.",
-        "Make a subject line that starts with ‘What if…’ or ‘This changes everything’ and ties to [INSERT HERE – ie. “a curiosity topic your product solves”]."
-      ]
-    },
-    "urgency": {
-      "basic": [
-        "Write a subject line that uses urgency like ‘Last chance’, ‘Almost gone’, or ‘Closing tonight’.",
-        "Create a subject with time pressure like ‘Only 3 hours left to ___’ or ‘Your spot expires soon’."
+        "Start your copy with a hook like \u2018This one trick made everything easier...\u2019 and hint at [INSERT HERE \u2013 ie. \u201cthe unexpected solution your product offers\u201d].",
+        "Write a teaser headline like \u2018They don\u2019t want you to know this...\u2019 and reveal [INSERT HERE \u2013 ie. \u201ca surprising fact about your solution or process\u201d].",
+        "Use \u2018Here\u2019s what nobody talks about...\u2019 to introduce [INSERT HERE \u2013 ie. \u201ca core benefit you offer\u201d] in a curious tone.",
+        "Hook with \u2018We tested this on 100 users...\u2019 then give [INSERT HERE \u2013 ie. \u201ca surprising or exciting result\u201d].",
+        "Open with \u2018You won\u2019t believe how simple this is...\u2019 and explain [INSERT HERE \u2013 ie. \u201ca key benefit\u201d] in one sentence."
       ]
     }
   }
