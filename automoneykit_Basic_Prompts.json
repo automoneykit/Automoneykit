@@ -1,8 +1,44 @@
 {
   "viral_hooks": {
-    "shock": {
+    "Shock": {
       "basic": [
-        "Create a viral hook that highlights [INSERT HERE \u2013 ie. \u201cyour product or service\u201d] by showing how it helps with [INSERT HERE \u2013 ie. \u201ca common problem your buyer is frustrated with \u2013 like \u2018never sticking to habits\u2019 or \u2018feeling overwhelmed\u2019\u201d]. Use simple, relatable language and include [INSERT HERE \u2013 ie. \u201ca short call-to-action like \u2018Tap the link\u2019, \u2018Try this now\u2019, or \u2018Watch how it works\u2019\u201d]."
+        "Create a viral hook that highlights [INSERT HERE \u2013 ie. \u201cyour product or service\u201d] by showing how it helps with [INSERT HERE \u2013 ie. \u201ca common problem your buyer is frustrated with \u2013 like \u2018never sticking to habits\u2019 or \u2018feeling overwhelmed\u2019\u201d]. Use simple, relatable language and include [INSERT HERE \u2013 ie. \u201ca short call-to-action like \u2018Tap the link\u2019, \u2018Try this now\u2019, or \u2018Watch how it works\u2019\u201d].",
+        "Create a viral hook that highlights [INSERT HERE \u2013 ie. \u201ca weight loss tool\u201d] by showing how it helps with [INSERT HERE \u2013 ie. \u201cyo-yo dieting or low motivation\u201d]. Use simple, relatable language and include [INSERT HERE \u2013 ie. \u201cTry this now\u201d]."
+      ]
+    }
+  },
+  "problem_solution": {
+    "Direct Fix": {
+      "basic": [
+        "Create a problem-solution ad that highlights [INSERT HERE \u2013 ie. \u201cyour product\u201d] by showing how it solves [INSERT HERE \u2013 ie. \u201ca specific frustration \u2013 like never finishing tasks\u201d]. Keep the language casual and end with [INSERT HERE \u2013 ie. \u201cTry this free today\u201d]."
+      ]
+    }
+  },
+  "sales_copy": {
+    "Social Proof": {
+      "basic": [
+        "Create a landing page headline or sales blurb that highlights [INSERT HERE \u2013 ie. \u201cyour product or service\u201d] by showing how it helps with [INSERT HERE \u2013 ie. \u201ca common problem your buyer is frustrated with \u2013 like \u2018never sticking to habits\u2019 or \u2018feeling overwhelmed\u2019\u201d]. Use simple, relatable language and include [INSERT HERE \u2013 ie. \u201ca short call-to-action like \u2018Tap the link\u2019, \u2018Try this now\u2019, or \u2018Watch how it works\u2019\u201d]."
+      ]
+    }
+  },
+  "tiktok_scripts": {
+    "Personal Story": {
+      "basic": [
+        "Write a TikTok script that highlights [INSERT HERE \u2013 ie. \u201ca coaching service\u201d] by telling a relatable story about [INSERT HERE \u2013 ie. \u201cfeeling stuck, then trying something new\u201d]. End with [INSERT HERE \u2013 ie. \u201cWatch how it changed everything\u201d]."
+      ]
+    }
+  },
+  "instagram": {
+    "Carousel Tips": {
+      "basic": [
+        "Create an Instagram carousel that showcases [INSERT HERE \u2013 ie. \u201cyour product or idea\u201d] with tips on how it helps with [INSERT HERE \u2013 ie. \u201coverwhelm, burnout, or inconsistency\u201d]. Use short, slide-by-slide copy and include [INSERT HERE \u2013 ie. \u201cSave this\u201d or \u201cTry it now\u201d]."
+      ]
+    }
+  },
+  "email_subjects": {
+    "Curiosity": {
+      "basic": [
+        "Write an email subject line that teases [INSERT HERE \u2013 ie. \u201ca surprising benefit\u201d] about [INSERT HERE \u2013 ie. \u201cyour service or offer\u201d]. Make them curious enough to open it. Example: [INSERT HERE \u2013 ie. \u201cThis is why nothing else worked\u2026\u201d]"
       ]
     }
   }
