@@ -93,6 +93,84 @@
       font-weight: bold;
     }
   </style>
+  <script>
+    const tierHierarchy = ["basic", "premium", "elite", "master"];
+    const userTierAccess = "basic";
+    let promptData = {};
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const response = await fetch("automoneykit_Basic_Prompts.json");
+        promptData = await response.json();
+        console.log("Prompts loaded:", promptData);
+      } catch (err) {
+        console.error("Failed to load prompts:", err);
+      }
+    });
+
+    function handleTierChange() {
+      const tier = document.getElementById("tier").value;
+      const userLevelIndex = tierHierarchy.indexOf(userTierAccess);
+      const selectedLevelIndex = tierHierarchy.indexOf(tier);
+
+      document.getElementById("promptTitle").style.display = "none";
+      document.getElementById("promptBoxContainer").innerHTML = "";
+      document.getElementById("aiButtons").style.display = "none";
+
+      if (selectedLevelIndex > userLevelIndex) {
+        document.getElementById("tierWarning").style.display = "block";
+        document.getElementById("categorySection").style.display = "none";
+        document.getElementById("styleSection").style.display = "none";
+      } else {
+        document.getElementById("tierWarning").style.display = "none";
+        document.getElementById("categorySection").style.display = "block";
+      }
+    }
+
+    function loadStyles() {
+      const category = document.getElementById("category").value;
+      const styleDropdown = document.getElementById("style");
+
+      styleDropdown.innerHTML = '<option value="">-- Choose Style --</option>';
+      if (promptData[category]) {
+        Object.keys(promptData[category]).forEach(style => {
+          const option = document.createElement("option");
+          option.value = style;
+          option.textContent = style;
+          styleDropdown.appendChild(option);
+        });
+        document.getElementById("styleSection").style.display = "block";
+      }
+    }
+
+    function loadPrompts() {
+      const tier = document.getElementById("tier").value;
+      const category = document.getElementById("category").value;
+      const style = document.getElementById("style").value;
+      const container = document.getElementById("promptBoxContainer");
+      const promptTitle = document.getElementById("promptTitle");
+      const aiButtons = document.getElementById("aiButtons");
+
+      container.innerHTML = "";
+      if (promptData[category] && promptData[category][style] && promptData[category][style][tier]) {
+        promptData[category][style][tier].forEach(prompt => {
+          const div = document.createElement("div");
+          div.className = "prompt-box";
+          div.innerHTML = prompt + '<div class="copied-msg">Copied!</div>';
+          div.onclick = function () {
+            navigator.clipboard.writeText(prompt).then(() => {
+              const msg = div.querySelector('.copied-msg');
+              msg.style.display = "block";
+              setTimeout(() => msg.style.display = "none", 1500);
+            });
+          };
+          container.appendChild(div);
+        });
+        promptTitle.style.display = "block";
+        aiButtons.style.display = "block";
+      }
+    }
+  </script>
 </head>
 <body>
   <header>
@@ -145,164 +223,5 @@
       <button onclick="location.reload()">Reset</button>
     </div>
   </main>
-
-  <script>
-    let promptData = {};
-    const userTierAccess = "basic"; // Default user access level
-    const tierHierarchy = ["basic", "premium", "elite", "master"];
-
-    fetch('./automoneykit_Basic_Prompts.json')
-      .then(res => res.json())
-      .then(data => {
-        promptData = data.basic;
-      });
-
-    function handleTierChange() {
-      const tier = document.getElementById("tier").value;
-      const userLevelIndex = tierHierarchy.indexOf(userTierAccess);
-      const selectedLevelIndex = tierHierarchy.indexOf(tier);
-
-      document.getElementById("promptTitle").style.display = "none";
-      document.getElementById("promptBoxContainer").innerHTML = "";
-      document.getElementById("aiButtons").style.display = "none";
-
-      if (selectedLevelIndex > userLevelIndex) {
-        document.getElementById("tierWarning").style.display = "block";
-        document.getElementById("categorySection").style.display = "none";
-        document.getElementById("styleSection").style.display = "none";
-      } else {
-        document.getElementById("tierWarning").style.display = "none";
-        document.getElementById("categorySection").style.display = "block";
-      }
-    }
-
-    function loadStyles() {
-      const category = document.getElementById("category").value;
-      const styleDropdown = document.getElementById("style");
-
-      styleDropdown.innerHTML = '<option value="">-- Choose Style --</option>';
-      if (promptData[category]) {
-        Object.keys(promptData[category]).forEach(style => {
-          const option = document.createElement("option");
-          option.value = style;
-          option.textContent = style;
-          styleDropdown.appendChild(option);
-        });
-        document.getElementById("styleSection").style.display = "block";
-      }
-    }
-
-    function loadPrompts() {
-      const tier = document.getElementById("tier").value;
-      const category = document.getElementById("category").value;
-      const style = document.getElementById("style").value;
-      const container = document.getElementById("promptBoxContainer");
-      const promptTitle = document.getElementById("promptTitle");
-      const aiButtons = document.getElementById("aiButtons");
-
-      container.innerHTML = "";
-      if (promptData[category] && promptData[category][style]) {
-        promptData[category][style].forEach(prompt => {
-          const div = document.createElement("div");
-          div.className = "prompt-box";
-          div.innerHTML = prompt + '<div class="copied-msg">Copied!</div>';
-          div.onclick = function() {
-            navigator.clipboard.writeText(prompt).then(() => {
-              const msg = div.querySelector('.copied-msg');
-              msg.style.display = "block";
-              setTimeout(() => msg.style.display = "none", 1500);
-            });
-          };
-          container.appendChild(div);
-        });
-        promptTitle.style.display = "block";
-        aiButtons.style.display = "block";
-      }
-    }
-  </script>
-
-<script>
-  let promptData = {};
-  const userTierAccess = 'basic'; // Adjust as needed
-  const tierHierarchy = ['basic', 'premium', 'elite', 'master'];
-
-  fetch('automoneykit_Basic_Prompts.json')
-    .then(response => response.json())
-    .then(data => {
-      promptData = data;
-    })
-    .catch(error => {
-      console.error('Failed to load JSON:', error);
-      alert("Error loading prompts. Please check if the JSON file is in the correct folder.");
-    });
-
-  function handleTierChange() {
-    const tier = document.getElementById("tier").value;
-    const userLevelIndex = tierHierarchy.indexOf(userTierAccess);
-    const selectedLevelIndex = tierHierarchy.indexOf(tier);
-
-    document.getElementById("promptTitle").style.display = "none";
-    document.getElementById("promptBoxContainer").innerHTML = "";
-    document.getElementById("aiButtons").style.display = "none";
-
-    if (selectedLevelIndex > userLevelIndex) {
-      document.getElementById("tierWarning").style.display = "block";
-      document.getElementById("categorySection").style.display = "none";
-      document.getElementById("styleSection").style.display = "none";
-    } else {
-      document.getElementById("tierWarning").style.display = "none";
-      document.getElementById("categorySection").style.display = "block";
-    }
-  }
-
-  function loadStyles() {
-    const category = document.getElementById("category").value;
-    const styleDropdown = document.getElementById("style");
-
-    styleDropdown.innerHTML = '<option value="">-- Choose Style --</option>';
-    if (promptData[category]) {
-      Object.keys(promptData[category]).forEach(style => {
-        const option = document.createElement("option");
-        option.value = style;
-        option.textContent = style;
-        styleDropdown.appendChild(option);
-      });
-      document.getElementById("styleSection").style.display = "block";
-    }
-  }
-
-  function loadPrompts() {
-    const tier = document.getElementById("tier").value;
-    const category = document.getElementById("category").value;
-    const style = document.getElementById("style").value;
-    const container = document.getElementById("promptBoxContainer");
-    const promptTitle = document.getElementById("promptTitle");
-    const aiButtons = document.getElementById("aiButtons");
-
-    container.innerHTML = "";
-    if (
-      promptData[category] &&
-      promptData[category][style] &&
-      promptData[category][style][tier]
-    ) {
-      promptData[category][style][tier].forEach(prompt => {
-        const div = document.createElement("div");
-        div.className = "prompt-box";
-        div.innerHTML = prompt + '<div class="copied-msg">Copied!</div>';
-        div.onclick = function () {
-          navigator.clipboard.writeText(prompt).then(() => {
-            const msg = div.querySelector(".copied-msg");
-            msg.style.display = "block";
-            setTimeout(() => (msg.style.display = "none"), 1500);
-          });
-        };
-        container.appendChild(div);
-      });
-      promptTitle.style.display = "block";
-      aiButtons.style.display = "block";
-    }
-  }
-</script>
-
 </body>
 </html>
