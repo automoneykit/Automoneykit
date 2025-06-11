@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,127 +7,221 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background-color: #f4f4f4;
+      background-color: #ffffff;
+      color: #000;
       margin: 0;
-      padding: 30px 20px;
+      padding: 0;
+    }
+    header {
+      background-color: #00555A;
+      color: white;
+      padding: 40px 20px;
       text-align: center;
-      color: #333;
     }
-
-    h1 {
-      font-size: 2em;
-      margin-bottom: 20px;
-      color: #222;
+    header h1 {
+      font-size: 32px;
+      margin: 0;
+      line-height: 1.4;
     }
-
-    label {
-      font-size: 1.2em;
-      display: block;
-      margin: 20px 0 10px;
-    }
-
-    select {
-      font-size: 1em;
-      padding: 10px;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-      background-color: #fff;
-      color: #333;
-    }
-
-    .prompt-box {
-      margin: 20px auto;
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
       padding: 20px;
-      max-width: 90%;
-      border-radius: 15px;
-      background-color: #e0f7fa;
-      font-size: 1.1em;
-      color: #004d40;
-      cursor: pointer;
-      transition: background-color 0.3s;
     }
-
-    .prompt-box:hover {
-      background-color: #b2ebf2;
-    }
-
-    .copied-msg {
-      display: none;
-      color: green;
+    label {
+      font-size: 18px;
       font-weight: bold;
-      margin-top: 10px;
     }
-
-    .buttons {
-      margin-top: 20px;
+    select {
+      width: 100%;
+      font-size: 16px;
+      padding: 10px;
+      margin: 10px 0 20px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .subtext {
+      font-size: 16px;
+      color: #444;
+      margin-bottom: 10px;
+    }
+    .prompt-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+    .prompt-box {
+      background-color: #DFF0D8;
+      border-left: 6px solid #1BA94C;
+      padding: 16px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      position: relative;
+    }
+    .copied-msg {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      background-color: #FF652F;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      display: none;
+      font-size: 14px;
+    }
+    .btn-row {
+      text-align: center;
+      margin-top: 30px;
       display: none;
     }
-
-    .buttons button {
-      margin: 5px;
-      padding: 10px 15px;
+    .btn-row button {
+      padding: 12px 24px;
+      margin: 0 10px;
+      font-size: 16px;
       border: none;
-      border-radius: 8px;
-      font-size: 1em;
+      border-radius: 5px;
       cursor: pointer;
-      background-color: #007bff;
-      color: #fff;
+      background-color: #FF652F;
+      color: white;
+    }
+    .upgrade-warning {
+      color: red;
+      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
-</head>
-<body>
-  <h1>AutoMoneyKit Prompt Launcher</h1>
-
-  <label for="category">Please select a category to get started:</label>
-  <select id="category">
-    <option>-- Select a category --</option>
-    <option value="marketing">Marketing</option>
-    <option value="sales">Sales</option>
-  </select>
-
-  <label for="style">Now select a prompt style to view your prompt:</label>
-  <select id="style">
-    <option>-- Select a style --</option>
-    <option value="shock">Shock</option>
-    <option value="story">Story</option>
-  </select>
-
-  <div id="prompt" class="prompt-box" onclick="copyPrompt()">Click here to copy your prompt</div>
-  <div id="copied" class="copied-msg">Copied!</div>
-
-  <div class="buttons" id="ai-buttons">
-    <button onclick="window.open('https://chat.openai.com', '_blank')">Open ChatGPT</button>
-    <button onclick="window.open('https://claude.ai', '_blank')">Open Claude</button>
-  </div>
-
   <script>
-    const prompts = {
-      marketing: {
-        shock: "Create a viral hook that highlights [INSERT HERE – ie. 'your product'] by showing how it helps with [INSERT HERE – ie. 'a pain point']. Include a CTA like 'Tap to learn more'.",
-        story: "Write a story-driven promo for [INSERT HERE – ie. 'your product'] starting with [INSERT HERE – ie. 'a relatable struggle'] and ending in a transformation."
-      },
-      sales: {
-        shock: "Start with a bold claim about [INSERT HERE – ie. 'your offer'] and reveal the surprise benefit they don’t expect. Add a line like 'You’ll never believe this'.",
-        story: "Explain how [INSERT HERE – ie. 'a client'] was struggling, found your offer, and transformed. End with a simple CTA like 'Start your story now'."
-      }
-    };
+    const tierHierarchy = ["basic", "premium", "elite", "master"];
+    const userTierAccess = "basic";
+    let promptData = {};
 
-    document.getElementById('style').addEventListener('change', () => {
-      const category = document.getElementById('category').value;
-      const style = document.getElementById('style').value;
-      if (prompts[category] && prompts[category][style]) {
-        document.getElementById('prompt').textContent = prompts[category][style];
-        document.getElementById('copied').style.display = 'none';
-        document.getElementById('ai-buttons').style.display = 'block';
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const response = await fetch("automoneykit_Basic_Prompts.json");
+        promptData = await response.json();
+        console.log("Prompts loaded:", promptData);
+      } catch (err) {
+        console.error("Failed to load prompts:", err);
       }
     });
 
-    function copyPrompt() {
-      const promptText = document.getElementById('prompt').textContent;
-      navigator.clipboard.writeText(promptText).then(() => {
-        document.getElementById('copied').style.display = 'block';
-      });
+    function handleTierChange() {
+      const tier = document.getElementById("tier").value;
+      const userLevelIndex = tierHierarchy.indexOf(userTierAccess);
+      const selectedLevelIndex = tierHierarchy.indexOf(tier);
+
+      document.getElementById("promptTitle").style.display = "none";
+      document.getElementById("promptBoxContainer").innerHTML = "";
+      document.getElementById("aiButtons").style.display = "none";
+
+      if (selectedLevelIndex > userLevelIndex) {
+        document.getElementById("tierWarning").style.display = "block";
+        document.getElementById("categorySection").style.display = "none";
+        document.getElementById("styleSection").style.display = "none";
+      } else {
+        document.getElementById("tierWarning").style.display = "none";
+        document.getElementById("categorySection").style.display = "block";
+      }
+    }
+
+    function loadStyles() {
+      const category = document.getElementById("category").value;
+      const styleDropdown = document.getElementById("style");
+
+      styleDropdown.innerHTML = '<option value="">-- Choose Style --</option>';
+      if (promptData[category]) {
+        Object.keys(promptData[category]).forEach(style => {
+          const option = document.createElement("option");
+          option.value = style;
+          option.textContent = style;
+          styleDropdown.appendChild(option);
+        });
+        document.getElementById("styleSection").style.display = "block";
+      }
+    }
+
+    function loadPrompts() {
+      const tier = document.getElementById("tier").value;
+      const category = document.getElementById("category").value;
+      const style = document.getElementById("style").value;
+      const container = document.getElementById("promptBoxContainer");
+      const promptTitle = document.getElementById("promptTitle");
+      const aiButtons = document.getElementById("aiButtons");
+
+      container.innerHTML = "";
+      if (promptData[category] && promptData[category][style] && promptData[category][style][tier]) {
+        promptData[category][style][tier].forEach(prompt => {
+          const cleanPrompt = prompt.replace(/^Prompt\s+#\d+:\s*/i, '');
+          const div = document.createElement("div");
+          div.className = "prompt-box";
+          div.innerHTML = cleanPrompt + '<div class="copied-msg">Copied!</div>';
+          div.onclick = function () {
+            navigator.clipboard.writeText(cleanPrompt).then(() => {
+              const msg = div.querySelector('.copied-msg');
+              msg.style.display = "block";
+              setTimeout(() => msg.style.display = "none", 1500);
+            });
+          };
+          container.appendChild(div);
+        });
+        promptTitle.style.display = "block";
+        aiButtons.style.display = "block";
+      }
     }
   </script>
+</head>
+<body>
+  <header>
+    <h1>AutoMoneyKit Prompt Launcher</h1>
+  </header>
+  <main class="container">
+    <label for="tier">Select Your Prompt Level:</label>
+    <select id="tier" onchange="handleTierChange()">
+      <option value="">-- Choose Access Tier --</option>
+      <option value="basic">Basic</option>
+      <option value="premium">Premium</option>
+      <option value="elite">Elite</option>
+      <option value="master">Master</option>
+    </select>
+    <div id="tierWarning" class="upgrade-warning" style="display:none;">
+      You haven’t unlocked this tier yet. 
+      <button onclick="alert('Redirect to Upgrade Page')">Upgrade</button>
+    </div>
+
+    <div id="categorySection" style="display:none;">
+      <label for="category">Select Category:</label>
+      <div class="subtext">Choose the type of content this prompt is for.</div>
+      <select id="category" onchange="loadStyles()">
+        <option value="">-- Choose Category --</option>
+        <option value="viral_hooks">Viral Hooks – All Platforms</option>
+        <option value="problem_solution">Problem/Solution Templates</option>
+        <option value="sales_copy">Sales Page Copy Prompts</option>
+        <option value="tiktok_scripts">TikTok + Reels Video Scripts</option>
+        <option value="instagram">Instagram Caption + Carousel Templates</option>
+        <option value="email_subjects">Email Subject Lines + Openers</option>
+      </select>
+    </div>
+
+    <div id="styleSection" style="display:none;">
+      <label for="style">Select Prompt Style:</label>
+      <div class="subtext">Choose how you want the ad to be structured or feel.</div>
+      <select id="style" onchange="loadPrompts()">
+        <option value="">-- Choose Style --</option>
+      </select>
+    </div>
+
+    <div class="prompt-title" id="promptTitle" style="display:none;">
+      Click the prompt to copy it. Then open your AI tool and paste it.
+    </div>
+    <div id="promptBoxContainer"></div>
+
+    <div class="btn-row" id="aiButtons">
+      <button onclick="window.open('https://chat.openai.com/', '_blank')">Open in ChatGPT</button>
+      <button onclick="window.open('https://claude.ai/', '_blank')">Open in Claude</button>
+      <button onclick="location.reload()">Reset</button>
+    </div>
+  </main>
 </body>
 </html>
