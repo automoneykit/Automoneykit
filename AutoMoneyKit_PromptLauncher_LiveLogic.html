@@ -136,6 +136,9 @@
     });
 
     styleSelect.addEventListener("change", () => {
+      if (styleSelect.value) {
+        inputsWrapper.classList.remove("hidden");
+      }
       inputsWrapper.classList.remove("hidden");
       promptOutput.style.display = "none";
     });
@@ -213,6 +216,9 @@
     }
   
     styleSelect.addEventListener("change", () => {
+      if (styleSelect.value) {
+        inputsWrapper.classList.remove("hidden");
+      }
       inputsWrapper.classList.remove("hidden");
       promptOutput.style.display = "none";
       productInput.selectedIndex = 0;
@@ -232,6 +238,9 @@
       buildPrompt();
     });
     angleInput.addEventListener("change", () => {
+      document.getElementById("customAngleInput").classList.toggle("hidden", angleInput.value !== "Other");
+      buildPrompt();
+    });
       document.getElementById("customAngleInput").classList.toggle("hidden", angleInput.value !== "Other");
       buildPrompt();
     });
@@ -257,6 +266,9 @@
     }
 
     styleSelect.addEventListener("change", () => {
+      if (styleSelect.value) {
+        inputsWrapper.classList.remove("hidden");
+      }
       inputsWrapper.classList.remove("hidden");
       promptOutput.style.display = "none";
       extraPrompts.classList.add("hidden");
