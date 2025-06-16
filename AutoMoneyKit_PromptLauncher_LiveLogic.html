@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoMoneyKit Prompt Launcher – Fixed v2</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
+    h1 { color: #00ff88; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    select, input[type="text"] { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; font-size: 1rem; }
+    #promptOutput { background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px; border-radius: 5px; min-height: 100px; cursor: pointer; white-space: pre-wrap; display: none; }
+    .copied { color: #00ff88; font-size: 0.9em; margin-top: 5px; display: none; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>AutoMoneyKit Prompt Launcher</h1>
+
+  <label for="categorySelect">Select Category:</label>
+  <select id="categorySelect">
+    <option value="">-- Choose Category --</option>
+    <option value="viral_hooks">Viral Hooks – All Platforms</option>
+    <option value="problem_solution">Problem/Solution Templates</option>
+    <option value="sales_copy">Sales Page Copy Prompts</option>
+    <option value="video_scripts">TikTok + Reels Video Scripts</option>
+    <option value="instagram">Instagram Caption + Carousel Templates</option>
+    <option value="email">Email Subject Lines + Openers</option>
+  </select>
+
+  <div id="styleWrapper" class="hidden">
+    <label for="styleSelect">Select Style:</label>
+    <select id="styleSelect">
+      <option value="">-- Choose Style --</option>
+    </select>
+  </div>
+
+  <div id="inputsWrapper" class="hidden">
+    <label for="productInput">What are you promoting?</label>
+    <input type="text" id="productInput" placeholder="e.g. mobile app" />
+
+    <label for="benefitInput">What does it help with?</label>
+    <input type="text" id="benefitInput" placeholder="e.g. fun" />
+
+    <label for="angleInput">What is the unique angle?</label>
+    <input type="text" id="angleInput" placeholder="e.g. humour" />
+  </div>
+
+  <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...</div>
+  <div class="copied" id="copiedMsg">Prompt copied!</div>
+
+  <script>
+    const categorySelect = document.getElementById("categorySelect");
+    const styleSelect = document.getElementById("styleSelect");
+    const styleWrapper = document.getElementById("styleWrapper");
+    const inputsWrapper = document.getElementById("inputsWrapper");
+    const productInput = document.getElementById("productInput");
+    const benefitInput = document.getElementById("benefitInput");
+    const angleInput = document.getElementById("angleInput");
+    const promptOutput = document.getElementById("promptOutput");
+    const copiedMsg = document.getElementById("copiedMsg");
+
+    const styles = {
+      viral_hooks: ["shock", "curiosity", "controversial", "emotional", "unexpected"],
+      problem_solution: ["pain-point", "before-after", "case-study", "transformation", "logic-driven"],
+      sales_copy: ["headline", "bullet-points", "hero-intro", "objection-crusher", "urgency-based"],
+      video_scripts: ["fast-paced", "relatable", "skit-based", "testimonial", "tutorial-style"],
+      instagram: ["carousel-tips", "story-reveal", "value-post", "contrast-style", "hook-opener"],
+      email: ["curiosity", "urgency", "benefit", "story-lead", "personalized"]
+    };
+
+    categorySelect.addEventListener("change", () => {
+      styleWrapper.classList.remove("hidden");
+      styleSelect.innerHTML = '<option value="">-- Choose Style --</option>';
+      inputsWrapper.classList.add("hidden");
+      promptOutput.style.display = "none";
+
+      const selected = categorySelect.value;
+      if (styles[selected]) {
+        styles[selected].forEach(style => {
+          const option = document.createElement("option");
+          option.value = style;
+          option.textContent = style;
+          styleSelect.appendChild(option);
+        });
+      }
+    });
+
+    styleSelect.addEventListener("change", () => {
+      inputsWrapper.classList.remove("hidden");
+      promptOutput.style.display = "none";
+    });
+
+    [productInput, benefitInput, angleInput].forEach(el => {
+      el.addEventListener("input", buildPrompt);
+    });
+
+    function buildPrompt() {
+      const category = categorySelect.value;
+      const style = styleSelect.value;
+      const product = productInput.value.trim();
+      const benefit = benefitInput.value.trim();
+      const angle = angleInput.value.trim();
+
+      if (category && style && product && benefit && angle) {
+        promptOutput.style.display = "block";
+        promptOutput.textContent = "Typing...";
+        const text = `Create a ${style} style ${category.replace(/_/g, ' ')} prompt for my ${product} that helps with ${benefit}. It uses ${angle} as its unique angle to engage viewers and drive action.`;
+        typeEffect(text);
+      }
+    }
+
+    function typeEffect(text) {
+      promptOutput.textContent = "";
+      let i = 0;
+      const typing = setInterval(() => {
+        if (i < text.length) {
+          promptOutput.textContent += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(typing);
+        }
+      }, 20);
+    }
+
+    function copyPrompt() {
+      const text = promptOutput.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        copiedMsg.style.display = "block";
+        setTimeout(() => copiedMsg.style.display = "none", 1500);
+      });
+    }
+  </script>
+</body>
+</html>
