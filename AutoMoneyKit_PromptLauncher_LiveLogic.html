@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoMoneyKit Prompt Launcher – Fixed</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      padding: 20px;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      color: #00ff88;
+      font-size: 1.5em;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    select, input[type="text"], button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+    #promptOutput {
+      background: #222;
+      border: 1px solid #444;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 5px;
+      min-height: 100px;
+      white-space: pre-wrap;
+      display: none;
+      cursor: pointer;
+    }
+    .copied {
+      color: #00ff88;
+      font-size: 0.9em;
+      margin-top: 5px;
+      display: none;
+    }
+    .hidden {
+      display: none;
+    }
+    .helper {
+      font-size: 0.9em;
+      color: #ccc;
+    }
+    .step {
+      font-size: 1.2em;
+      color: #00ff88;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🚀 AutoMoneyKit Prompt Launcher</h1>
+  <p class="step">Step 1: Pick the type of ad you're creating 👇</p>
+  <label for="categorySelect">Select Category:</label>
+  <select id="categorySelect">
+    <option value="">-- Choose Category --</option>
+    <option value="viral_hooks">Viral Hooks – All Platforms</option>
+    <option value="problem_solution">Problem/Solution Templates</option>
+    <option value="sales_copy">Sales Page Copy Prompts</option>
+    <option value="video_scripts">TikTok + Reels Video Scripts</option>
+    <option value="instagram">Instagram Caption + Carousel Templates</option>
+    <option value="email">Email Subject Lines + Openers</option>
+  </select>
+
+  <div id="styleWrapper" class="hidden">
+    <p class="step">Step 2: Choose the vibe or layout of your ad 💡</p>
+    <label for="styleSelect">Select Style:</label>
+    <select id="styleSelect">
+      <option value="">-- Choose Style --</option>
+    </select>
+  </div>
+
+  <div id="inputsWrapper" class="hidden">
+    <p class="step">Step 3: Tell us about your offer ✍️</p>
+    <label for="productInput">What are you promoting?</label>
+    <select id="productInput">
+      <option value="">-- Choose a product or service --</option>
+      <option value="mobile app">Mobile App</option>
+      <option value="coaching program">Coaching Program</option>
+      <option value="online course">Online Course</option>
+      <option value="ecommerce store">Ecommerce Store</option>
+      <option value="membership site">Membership Site</option>
+      <option value="digital template">Digital Template</option>
+      <option value="service business">Service Business</option>
+      <option value="physical product">Physical Product</option>
+      <option value="affiliate offer">Affiliate Offer</option>
+      <option value="Other">Other (type your own)</option>
+    </select>
+    <input type="text" id="customProductInput" placeholder="Type your product..." class="hidden" />
+
+    <label for="benefitInput">What does it help with?</label>
+    <select id="benefitInput">
+      <option value="">-- Choose the benefit --</option>
+      <option value="saving time">Saving Time</option>
+      <option value="making money">Making Money</option>
+      <option value="reducing stress">Reducing Stress</option>
+      <option value="learning faster">Learning Faster</option>
+      <option value="entertainment">Entertainment</option>
+      <option value="building confidence">Building Confidence</option>
+      <option value="growing online presence">Growing Online Presence</option>
+      <option value="Other">Other (type your own)</option>
+    </select>
+    <input type="text" id="customBenefitInput" placeholder="Type the benefit..." class="hidden" />
+
+    <label for="angleInput">What is the unique angle?</label>
+    <select id="angleInput">
+      <option value="">-- Choose the angle --</option>
+      <option value="humour">Humour</option>
+      <option value="urgency">Urgency</option>
+      <option value="social proof">Social Proof</option>
+      <option value="scarcity">Scarcity</option>
+      <option value="emotional story">Emotional Story</option>
+      <option value="authority">Authority</option>
+      <option value="unexpected twist">Unexpected Twist</option>
+      <option value="Other">Other (type your own)</option>
+    </select>
+    <input type="text" id="customAngleInput" placeholder="Type the angle..." class="hidden" />
+  </div>
+
+  <div id="promptOutput" onclick="copyPrompt()">Tap here to copy prompt</div>
+  <div class="copied" id="copiedMsg">✅ Prompt copied!</div>
+
+  <script>
+    const categorySelect = document.getElementById("categorySelect");
+    const styleSelect = document.getElementById("styleSelect");
+    const styleWrapper = document.getElementById("styleWrapper");
+    const inputsWrapper = document.getElementById("inputsWrapper");
+    const productInput = document.getElementById("productInput");
+    const benefitInput = document.getElementById("benefitInput");
+    const angleInput = document.getElementById("angleInput");
+    const promptOutput = document.getElementById("promptOutput");
+    const copiedMsg = document.getElementById("copiedMsg");
+
+    const customProductInput = document.getElementById("customProductInput");
+    const customBenefitInput = document.getElementById("customBenefitInput");
+    const customAngleInput = document.getElementById("customAngleInput");
+
+    const styles = {
+      viral_hooks: ["shock", "curiosity", "controversial", "emotional", "unexpected"],
+      problem_solution: ["pain-point", "before-after", "case-study", "transformation", "logic-driven"],
+      sales_copy: ["headline", "bullet-points", "hero-intro", "objection-crusher", "urgency-based"],
+      video_scripts: ["fast-paced", "relatable", "skit-based", "testimonial", "tutorial-style"],
+      instagram: ["carousel-tips", "story-reveal", "value-post", "contrast-style", "hook-opener"],
+      email: ["curiosity", "urgency", "benefit", "story-lead", "personalized"]
+    };
+
+    categorySelect.addEventListener("change", () => {
+      styleWrapper.classList.remove("hidden");
+      inputsWrapper.classList.add("hidden");
+      promptOutput.style.display = "none";
+      styleSelect.innerHTML = '<option value="">-- Choose Style --</option>';
+      if (styles[categorySelect.value]) {
+        styles[categorySelect.value].forEach(style => {
+          const option = document.createElement("option");
+          option.value = style;
+          option.textContent = style;
+          styleSelect.appendChild(option);
+        });
+      }
+    });
+
+    styleSelect.addEventListener("change", () => {
+      inputsWrapper.classList.remove("hidden");
+      promptOutput.style.display = "none";
+    });
+
+    function checkInputsAndBuild() {
+      const product = productInput.value === "Other" ? customProductInput.value.trim() : productInput.value;
+      const benefit = benefitInput.value === "Other" ? customBenefitInput.value.trim() : benefitInput.value;
+      const angle = angleInput.value === "Other" ? customAngleInput.value.trim() : angleInput.value;
+
+      if (product && benefit && angle) {
+        const text = `Create a ${styleSelect.value} style ${categorySelect.value.replace(/_/g, ' ')} prompt for my ${product} that helps with ${benefit}. It uses ${angle} as its unique angle to engage viewers and drive action.`;
+        animateTyping(text);
+      }
+    }
+
+    [productInput, benefitInput, angleInput].forEach(el => {
+      el.addEventListener("change", checkInputsAndBuild);
+    });
+
+    [customProductInput, customBenefitInput, customAngleInput].forEach(el => {
+      el.addEventListener("input", checkInputsAndBuild);
+    });
+
+    productInput.addEventListener("change", () => {
+      customProductInput.classList.toggle("hidden", productInput.value !== "Other");
+    });
+
+    benefitInput.addEventListener("change", () => {
+      customBenefitInput.classList.toggle("hidden", benefitInput.value !== "Other");
+    });
+
+    angleInput.addEventListener("change", () => {
+      customAngleInput.classList.toggle("hidden", angleInput.value !== "Other");
+    });
+
+    function animateTyping(text) {
+      promptOutput.textContent = "";
+      promptOutput.style.display = "block";
+      copiedMsg.style.display = "none";
+      let i = 0;
+      const typing = setInterval(() => {
+        if (i < text.length) {
+          promptOutput.textContent += text[i];
+          i++;
+        } else {
+          clearInterval(typing);
+        }
+      }, 25);
+    }
+
+    function copyPrompt() {
+      navigator.clipboard.writeText(promptOutput.textContent).then(() => {
+        copiedMsg.style.display = "block";
+        setTimeout(() => copiedMsg.style.display = "none", 1500);
+      });
+    }
+  </script>
+</body>
+</html>
