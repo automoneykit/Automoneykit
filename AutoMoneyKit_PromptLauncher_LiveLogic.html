@@ -16,7 +16,8 @@
   </style>
 </head>
 <body>
-  <h1>AutoMoneyKit Prompt Launcher</h1>
+  <h1>🚀 AutoMoneyKit Prompt Launcher</h1>
+<p style="font-size:1.2em; color:#00ff88;">Step 1: Pick the type of ad you're creating 👇</p>
 
   <label for="categorySelect">Select Category:</label>
   <select id="categorySelect">
@@ -30,13 +31,15 @@
   </select>
 
   <div id="styleWrapper" class="hidden">
-    <label for="styleSelect">Select Style:</label>
+    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 2: Choose the vibe or layout of your ad 💡</p>
+<label for="styleSelect">Select Style:</label>
     <select id="styleSelect">
       <option value="">-- Choose Style --</option>
     </select>
   </div>
 
-  <div id="inputsWrapper" class="hidden">
+  <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 3: Tell us about your offer. Choose from lists or type your own ✍️</p>
+<div id="inputsWrapper" class="hidden">
     <label for="productInput">What are you promoting?</label>
     <select id="productInput">
       <option value="">-- Choose a product or service --</option>
@@ -85,8 +88,15 @@
     <p style="font-size:0.9em; color:#ccc;">✅ What's your secret sauce? Choose an angle or add your own twist.</p>
   </div>
 
-  <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...</div>
-  <div class="copied" id="copiedMsg">Prompt copied!</div>
+  <div id="promptStatus" style="font-size:0.95em; color:#999; margin-top:10px;"></div>
+<div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...</div>
+  <div id="extraPrompts" class="hidden" style="margin-top:15px;"></div>
+<p id="showMore" class="hidden" onclick="showMorePrompts()" style="cursor:pointer; color:#00ff88; font-weight:bold;">+ Show More Prompts</p>
+<div id="chatButtons" class="hidden" style="margin-top:20px;">
+  <button onclick="goToGPT()" style="margin-right:10px;">Go to ChatGPT</button>
+  <button onclick="goToClaude()">Go to Claude</button>
+</div>
+<div class="copied" id="copiedMsg">Prompt copied!</div>
 
   <script>
     const categorySelect = document.getElementById("categorySelect");
@@ -141,7 +151,10 @@
       const benefit = benefitInput.value.trim();
       const angle = angleInput.value.trim();
 
-      if (category && style && product && benefit && angle) {
+      
+    if (category && style && product && benefit && angle) {
+        if (promptOutput.textContent.trim() !== '') return;
+
         promptOutput.style.display = "block";
         promptOutput.textContent = "Typing...";
         const text = `Create a ${style} style ${category.replace(/_/g, ' ')} prompt for my ${product} that helps with ${benefit}. It uses ${angle} as its unique angle to engage viewers and drive action.`;
@@ -149,7 +162,36 @@
       }
     }
 
+    
+    
     function typeEffect(text) {
+      const status = document.getElementById("promptStatus");
+      status.textContent = "Typing...";
+      promptOutput.textContent = "";
+      const words = text.split(' ');
+      let i = 0;
+      const typing = setInterval(() => {
+        if (i < words.length) {
+          promptOutput.textContent += words[i] + ' ';
+          i++;
+        } else {
+          clearInterval(typing);
+          status.innerHTML = "<span style='color:#00ff88'>✔ Prompt ready!</span>";
+        }
+      }, 150);
+    }
+      promptOutput.textContent = "";
+      const words = text.split(' ');
+      let i = 0;
+      const typing = setInterval(() => {
+        if (i < words.length) {
+          promptOutput.textContent += words[i] + ' ';
+          i++;
+        } else {
+          clearInterval(typing);
+        }
+      }, 150);
+    }
       promptOutput.textContent = "";
       let i = 0;
       const typing = setInterval(() => {
@@ -201,7 +243,10 @@
       const benefit = benefitInput.value === "Other" ? document.getElementById("customBenefitInput").value.trim() : benefitInput.value;
       const angle = angleInput.value === "Other" ? document.getElementById("customAngleInput").value.trim() : angleInput.value;
 
-      if (category && style && product && benefit && angle) {
+      
+    if (category && style && product && benefit && angle) {
+        if (promptOutput.textContent.trim() !== '') return;
+
         promptOutput.style.display = "block";
         promptOutput.textContent = "Typing...";
         const text = `Create a ${style} style ${category.replace(/_/g, ' ')} prompt for my ${product} that helps with ${benefit}. It uses ${angle} as its unique angle to engage viewers and drive action.`;
@@ -209,6 +254,80 @@
       } else {
         promptOutput.style.display = "none";
       }
+    }
+
+    styleSelect.addEventListener("change", () => {
+      inputsWrapper.classList.remove("hidden");
+      promptOutput.style.display = "none";
+      extraPrompts.classList.add("hidden");
+      showMore.classList.add("hidden");
+      chatButtons.classList.add("hidden");
+      productInput.selectedIndex = 0;
+      benefitInput.selectedIndex = 0;
+      angleInput.selectedIndex = 0;
+      document.getElementById("customProductInput").classList.add("hidden");
+      document.getElementById("customBenefitInput").classList.add("hidden");
+      document.getElementById("customAngleInput").classList.add("hidden");
+    });
+
+    categorySelect.addEventListener("change", () => {
+      styleWrapper.classList.remove("hidden");
+      styleSelect.innerHTML = '<option value="">-- Choose Style --</option>';
+      inputsWrapper.classList.add("hidden");
+      promptOutput.style.display = "none";
+      extraPrompts.classList.add("hidden");
+      showMore.classList.add("hidden");
+      chatButtons.classList.add("hidden");
+      const selected = categorySelect.value;
+      if (styles[selected]) {
+        styles[selected].forEach(style => {
+          const option = document.createElement("option");
+          option.value = style;
+          option.textContent = style;
+          styleSelect.appendChild(option);
+        });
+      }
+    });
+
+    function copyPrompt() {
+      const text = promptOutput.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        copiedMsg.style.display = "block";
+        setTimeout(() => copiedMsg.style.display = "none", 1500);
+        showMore.classList.remove("hidden");
+        chatButtons.classList.remove("hidden");
+      });
+    }
+
+    function showMorePrompts() {
+      let copies = '';
+      for (let i = 0; i < 5; i++) {
+        const sample = document.createElement("div");
+        sample.style.padding = "10px";
+        sample.style.marginTop = "8px";
+        sample.style.background = "#333";
+        sample.style.borderRadius = "5px";
+        sample.style.cursor = "pointer";
+        sample.textContent = promptOutput.textContent.replace('.', '') + ` (v${i + 2})`;
+        sample.onclick = () => {
+          navigator.clipboard.writeText(sample.textContent);
+          promptOutput.textContent = sample.textContent;
+          copiedMsg.style.display = "block";
+          setTimeout(() => copiedMsg.style.display = "none", 1500);
+          chatButtons.classList.remove("hidden");
+        };
+        document.getElementById("extraPrompts").appendChild(sample);
+      }
+      extraPrompts.classList.remove("hidden");
+      showMore.classList.add("hidden");
+    }
+
+    function goToGPT() {
+      window.open("https://chat.openai.com/", "_blank");
+    }
+
+    function goToClaude() {
+      window.open("https://claude.ai/", "_blank");
     }
 </script>
 </body>
