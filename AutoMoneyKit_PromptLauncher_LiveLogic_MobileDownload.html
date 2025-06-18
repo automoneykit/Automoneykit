@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoMoneyKit Prompt Launcher</title>
+  <style>
+    body {
+      background: #000;
+      color: #0f0;
+      font-family: monospace;
+      padding: 20px;
+    }
+    select, button {
+      margin-top: 10px;
+      display: block;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>AutoMoneyKit Prompt Launcher</h1>
+  <label>Select Category:</label>
+  <select id="category">
+    <option value="">-- Choose Category --</option>
+    <option value="1">Category 1</option>
+    <option value="2">Category 2</option>
+    <option value="3">Category 3</option>
+    <option value="4">Category 4</option>
+    <option value="5">Category 5</option>
+    <option value="6">Category 6</option>
+  </select>
+
+  <label class="hidden" id="styleLabel">Select Style:</label>
+  <select class="hidden" id="style"></select>
+
+  <label class="hidden" id="tierLabel">Select Tier:</label>
+  <select class="hidden" id="tier">
+    <option value="basic">Basic</option>
+    <option value="premium">Premium</option>
+    <option value="elite">Elite</option>
+    <option value="master">Master</option>
+  </select>
+
+  <div id="promptOutput" style="margin-top:20px; white-space: pre-wrap;"></div>
+
+  <script>
+    const categoryEl = document.getElementById('category');
+    const styleEl = document.getElementById('style');
+    const tierEl = document.getElementById('tier');
+    const styleLabel = document.getElementById('styleLabel');
+    const tierLabel = document.getElementById('tierLabel');
+    const output = document.getElementById('promptOutput');
+
+    let promptData = null;
+
+    categoryEl.addEventListener('change', async () => {
+      const cat = categoryEl.value;
+      output.innerText = '';
+      if (!cat) {
+        styleEl.classList.add('hidden');
+        styleLabel.classList.add('hidden');
+        return;
+      }
+      const url = `https://automoneykit.github.io/Automoneykit/AutoMoneyKit_Cat[${cat}]_FullStandard.json`;
+      const res = await fetch(url);
+      promptData = await res.json();
+
+      const styles = Object.keys(promptData[Object.keys(promptData)[0]]);
+      styleEl.innerHTML = '<option value="">-- Choose Style --</option>' + styles.map(s => `<option value="${s}">${s}</option>`).join('');
+      styleEl.classList.remove('hidden');
+      styleLabel.classList.remove('hidden');
+      tierEl.classList.add('hidden');
+      tierLabel.classList.add('hidden');
+    });
+
+    styleEl.addEventListener('change', () => {
+      const style = styleEl.value;
+      output.innerText = '';
+      if (!style) {
+        tierEl.classList.add('hidden');
+        tierLabel.classList.add('hidden');
+        return;
+      }
+      tierEl.classList.remove('hidden');
+      tierLabel.classList.remove('hidden');
+    });
+
+    tierEl.addEventListener('change', () => {
+      const tier = tierEl.value;
+      const style = styleEl.value;
+      const categoryKey = Object.keys(promptData)[0];
+      const prompts = promptData[categoryKey][style];
+      const list = prompts.map(p => p[tier]).join('\n\n');
+      output.innerText = list || 'No prompts found.';
+    });
+  </script>
+</body>
+</html>
