@@ -1,0 +1,74 @@
+{
+  "email_subjects": {
+    "shock": {
+      "basic": [
+        "Write an email subject line and opener that highlights your fitness app by showing how it helps with motivation. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your skincare product by showing how it helps with acne relief. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your budgeting app by showing how it helps with saving money. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your online course by showing how it helps with job promotions. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your AI tool by showing how it helps with task automation. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your coaching program by showing how it helps with confidence. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your healthy snack by showing how it helps with late-night cravings. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your freelance platform by showing how it helps with getting jobs faster. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your photo editing app by showing how it helps with content creation. Use shock to capture attention.",
+        "Write an email subject line and opener that highlights your meditation app by showing how it helps with anxiety. Use shock to capture attention."
+      ]
+    },
+    "story": {
+      "basic": [
+        "Write an email subject line and opener that highlights your fitness app by showing how it helps with daily habits. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your skincare product by showing how it helps with clear skin. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your budgeting app by showing how it helps with debt relief. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your online course by showing how it helps with career growth. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your AI tool by showing how it helps with productivity. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your coaching program by showing how it helps with focus. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your healthy snack by showing how it helps with nutrition. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your freelance platform by showing how it helps with client success. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your photo editing app by showing how it helps with post quality. Start with a short story to hook readers.",
+        "Write an email subject line and opener that highlights your meditation app by showing how it helps with stress. Start with a short story to hook readers."
+      ]
+    },
+    "comparison": {
+      "basic": [
+        "Write an email subject line and opener that highlights your fitness app by showing how it helps with building habits. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your skincare product by showing how it helps with smoother skin. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your budgeting app by showing how it helps with financial control. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your online course by showing how it helps with faster results. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your AI tool by showing how it helps with saving time. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your coaching program by showing how it helps with clarity. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your healthy snack by showing how it helps with avoiding junk food. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your freelance platform by showing how it helps with landing clients. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your photo editing app by showing how it helps with better reach. Use a bold comparison to grab interest.",
+        "Write an email subject line and opener that highlights your meditation app by showing how it helps with focus. Use a bold comparison to grab interest."
+      ]
+    },
+    "stats": {
+      "basic": [
+        "Write an email subject line and opener that highlights your fitness app by showing how it helps with consistency. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your skincare product by showing how it helps with glow. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your budgeting app by showing how it helps with expense tracking. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your online course by showing how it helps with income growth. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your AI tool by showing how it helps with performance. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your coaching program by showing how it helps with success rates. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your healthy snack by showing how it helps with wellness. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your freelance platform by showing how it helps with revenue. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your photo editing app by showing how it helps with engagement. Use a surprising stat to lead.",
+        "Write an email subject line and opener that highlights your meditation app by showing how it helps with sleep quality. Use a surprising stat to lead."
+      ]
+    },
+    "question": {
+      "basic": [
+        "Write an email subject line and opener that highlights your fitness app by showing how it helps with motivation. Start with a bold question.",
+        "Write an email subject line and opener that highlights your skincare product by showing how it helps with breakouts. Start with a bold question.",
+        "Write an email subject line and opener that highlights your budgeting app by showing how it helps with saving money. Start with a bold question.",
+        "Write an email subject line and opener that highlights your online course by showing how it helps with skills. Start with a bold question.",
+        "Write an email subject line and opener that highlights your AI tool by showing how it helps with clarity. Start with a bold question.",
+        "Write an email subject line and opener that highlights your coaching program by showing how it helps with self-belief. Start with a bold question.",
+        "Write an email subject line and opener that highlights your healthy snack by showing how it helps with diet goals. Start with a bold question.",
+        "Write an email subject line and opener that highlights your freelance platform by showing how it helps with consistent gigs. Start with a bold question.",
+        "Write an email subject line and opener that highlights your photo editing app by showing how it helps with visuals. Start with a bold question.",
+        "Write an email subject line and opener that highlights your meditation app by showing how it helps with balance. Start with a bold question."
+      ]
+    }
+  }
+}
