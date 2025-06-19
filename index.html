@@ -41,14 +41,33 @@
 
   <div id="inputsWrapper" class="hidden">
     <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 3: Tell us about your offer. Choose from lists or type your own ✍️</p>
+
     <label for="productInput">What are you promoting?</label>
-    <input type="text" id="productInput" placeholder="e.g. Coaching Program" />
+    <select id="productInput">
+      <option value="">-- Select Product --</option>
+      <option value="fitness app">Fitness App</option>
+      <option value="coaching program">Coaching Program</option>
+      <option value="email service">Email Service</option>
+      <option value="AI tool">AI Tool</option>
+    </select>
 
     <label for="benefitInput">What outcome does it create?</label>
-    <input type="text" id="benefitInput" placeholder="e.g. Saves time or boosts income" />
+    <select id="benefitInput">
+      <option value="">-- Select Outcome --</option>
+      <option value="boosts confidence">Boosts Confidence</option>
+      <option value="saves time">Saves Time</option>
+      <option value="grows revenue">Grows Revenue</option>
+      <option value="improves engagement">Improves Engagement</option>
+    </select>
 
     <label for="angleInput">What is the unique angle?</label>
-    <input type="text" id="angleInput" placeholder="e.g. Emotional story or social proof" />
+    <select id="angleInput">
+      <option value="">-- Select Angle --</option>
+      <option value="personal story">Personal Story</option>
+      <option value="social proof">Social Proof</option>
+      <option value="humour">Humour</option>
+      <option value="curiosity trigger">Curiosity Trigger</option>
+    </select>
   </div>
 
   <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...</div>
@@ -101,14 +120,14 @@
       updatePrompt(); // Update with style
     });
 
-    [productInput, benefitInput, angleInput].forEach(el => el.addEventListener("input", updatePrompt));
+    [productInput, benefitInput, angleInput].forEach(el => el.addEventListener("change", updatePrompt));
 
     function updatePrompt() {
       const category = categorySelect.value;
       const style = styleSelect.value;
-      const product = productInput.value.trim();
-      const benefit = benefitInput.value.trim();
-      const angle = angleInput.value.trim();
+      const product = productInput.value;
+      const benefit = benefitInput.value;
+      const angle = angleInput.value;
 
       if (!category) return;
 
