@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AutoMoneyKit Prompt Launcher – LiveLogic</title>
+  <title>AutoMoneyKit Prompt Launcher – Master Tier</title>
   <style>
     body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
     h1 { color: #00ff88; }
@@ -18,10 +18,8 @@
 </head>
 <body>
   <h1>🚀 AutoMoneyKit Prompt Launcher</h1>
-  <p style="font-size:1.2em; color:#00ff88;">Step 1: Pick the type of ad you're creating 👇</p>
-
-  <label for="categorySelect">Select Category:</label>
-  <select id="categorySelect">
+  <label for="category">Select Category:</label>
+  <select id="category" onchange="loadCategory(this.value)">
     <option value="">-- Choose Category --</option>
     <option value="viral_hooks">Viral Hooks – All Platforms</option>
     <option value="problem_solution">Problem/Solution Templates</option>
@@ -31,62 +29,7 @@
     <option value="email">Email Subject Lines + Openers</option>
   </select>
 
-  <div id="styleWrapper" class="hidden">
-    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 2: Choose the vibe or layout of your ad 💡</p>
-    <label for="styleSelect">Select Style:</label>
-    <select id="styleSelect">
-      <option value="">-- Choose Style --</option>
-    </select>
-  </div>
-
-  <div id="inputsWrapper" class="hidden">
-    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 3: Tell us about your offer. Choose from lists or type your own ✍️</p>
-    <label for="productInput">What are you promoting?</label>
-    <select id="productInput">
-      <option value="">-- Choose a product or service --</option>
-      <option value="mobile app">Mobile App</option>
-      <option value="coaching program">Coaching Program</option>
-      <option value="online course">Online Course</option>
-      <option value="ecommerce store">Ecommerce Store</option>
-      <option value="membership site">Membership Site</option>
-      <option value="digital template">Digital Template</option>
-      <option value="service business">Service Business</option>
-      <option value="physical product">Physical Product</option>
-      <option value="affiliate offer">Affiliate Offer</option>
-      <option value="Other">Other (type your own)</option>
-    </select>
-    <input type="text" id="customProductInput" placeholder="Type your product..." class="hidden" />
-
-    <label for="benefitInput">What does it help with?</label>
-    <select id="benefitInput">
-      <option value="">-- Choose the benefit --</option>
-      <option value="saving time">Saving Time</option>
-      <option value="making money">Making Money</option>
-      <option value="reducing stress">Reducing Stress</option>
-      <option value="learning faster">Learning Faster</option>
-      <option value="entertainment">Entertainment</option>
-      <option value="building confidence">Building Confidence</option>
-      <option value="growing online presence">Growing Online Presence</option>
-      <option value="Other">Other (type your own)</option>
-    </select>
-    <input type="text" id="customBenefitInput" placeholder="Type the benefit..." class="hidden" />
-
-    <label for="angleInput">What is the unique angle?</label>
-    <select id="angleInput">
-      <option value="">-- Choose the angle --</option>
-      <option value="humour">Humour</option>
-      <option value="urgency">Urgency</option>
-      <option value="social proof">Social Proof</option>
-      <option value="scarcity">Scarcity</option>
-      <option value="emotional story">Emotional Story</option>
-      <option value="authority">Authority</option>
-      <option value="unexpected twist">Unexpected Twist</option>
-      <option value="Other">Other (type your own)</option>
-    </select>
-    <input type="text" id="customAngleInput" placeholder="Type the angle..." class="hidden" />
-  </div>
-
-  <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...</div>
+  <div id="promptOutput">Waiting to auto build prompt...</div>
   <div class="copied" id="copiedMsg">✔ Prompt copied!</div>
   <div id="chatButtons" class="hidden">
     <button onclick="window.open('https://chat.openai.com/', '_blank')">Go to ChatGPT</button>
@@ -94,136 +37,20 @@
   </div>
 
   <script>
-    const categorySelect = document.getElementById("categorySelect");
-    const styleSelect = document.getElementById("styleSelect");
-    const styleWrapper = document.getElementById("styleWrapper");
-    const inputsWrapper = document.getElementById("inputsWrapper");
-    const promptOutput = document.getElementById("promptOutput");
-    const copiedMsg = document.getElementById("copiedMsg");
-    const chatButtons = document.getElementById("chatButtons");
-
-    const productInput = document.getElementById("productInput");
-    const benefitInput = document.getElementById("benefitInput");
-    const angleInput = document.getElementById("angleInput");
-
-    const customProductInput = document.getElementById("customProductInput");
-    const customBenefitInput = document.getElementById("customBenefitInput");
-    const customAngleInput = document.getElementById("customAngleInput");
-
-    const styles = {
-      viral_hooks: ["shock", "curiosity", "controversial", "emotional", "unexpected"],
-      problem_solution: ["pain-point", "before-after", "case-study", "transformation", "logic-driven"],
-      sales_copy: ["headline", "bullet-points", "hero-intro", "objection-crusher", "urgency-based"],
-      video_scripts: ["fast-paced", "relatable", "skit-based", "testimonial", "tutorial-style"],
-      instagram: ["carousel-tips", "story-reveal", "value-post", "contrast-style", "hook-opener"],
-      email: ["curiosity", "urgency", "benefit", "story-lead", "personalized"]
-    };
-
-    let promptData = {};
-
-    async function loadPrompts(category) {
-      const fileMap = {
-        viral_hooks: 'automoneykit_cat1_basic.json',
-        problem_solution: 'automoneykit_cat2_problem_solution_templates_basic.json',
-        sales_copy: 'AutoMoneyKit_Cat3_SalesCopy_Basic.json',
-        video_scripts: 'AutoMoneyKit_Cat4_TikTokScripts_Basic_Completed.json',
-        instagram: 'AutoMoneyKit_Cat5_InstagramCaptions_Basic_Completed.json',
-        email: 'AutoMoneyKit_Cat6_EmailOpeners_Basic_Completed.json'
+    function loadCategory(val) {
+      const catMap = {
+        "viral_hooks": "automoneykit_cat1_basic.json",
+        "problem_solution": "automoneykit_cat2_problem_solution_templates_basic.json",
+        "sales_copy": "AutoMoneyKit_Cat3_SalesCopy_Basic.json",
+        "video_scripts": "AutoMoneyKit_Cat4_TikTokScripts_Basic_Completed.json",
+        "instagram": "AutoMoneyKit_Cat5_InstagramCaptions_Basic_Completed.json",
+        "email": "AutoMoneyKit_Cat6_EmailOpeners_Basic_Completed.json"
       };
-      const fileName = fileMap[category];
-      if (!fileName) return;
-      const res = await fetch(`https://automoneykit.github.io/Automoneykit/${fileName}`);
-      promptData = await res.json();
-    }
-
-    categorySelect.addEventListener("change", async () => {
-      const category = categorySelect.value;
-      await loadPrompts(category);
-      styleSelect.innerHTML = '<option value="">-- Choose Style --</option>';
-      if (styles[category]) {
-        styles[category].forEach(style => {
-          const option = document.createElement("option");
-          option.value = style;
-          option.textContent = style;
-          styleSelect.appendChild(option);
-        });
+      const fileName = catMap[val];
+      if (fileName) {
+        document.getElementById("promptOutput").textContent = `Loading: ${fileName}`;
+        document.getElementById("promptOutput").style.display = "block";
       }
-      styleWrapper.classList.remove("hidden");
-      inputsWrapper.classList.add("hidden");
-      promptOutput.style.display = "none";
-      promptOutput.textContent = "Waiting to auto build prompt...";
-      chatButtons.classList.add("hidden");
-      copiedMsg.style.display = "none";
-    });
-
-    styleSelect.addEventListener("change", () => {
-      inputsWrapper.classList.remove("hidden");
-      resetInputs();
-      buildPrompt();
-    });
-
-    function resetInputs() {
-      productInput.selectedIndex = 0;
-      benefitInput.selectedIndex = 0;
-      angleInput.selectedIndex = 0;
-      customProductInput.value = "";
-      customBenefitInput.value = "";
-      customAngleInput.value = "";
-      customProductInput.classList.add("hidden");
-      customBenefitInput.classList.add("hidden");
-      customAngleInput.classList.add("hidden");
-    }
-
-    [productInput, benefitInput, angleInput,
-     customProductInput, customBenefitInput, customAngleInput]
-     .forEach(el => el.addEventListener("input", buildPrompt));
-
-    productInput.addEventListener("change", () => {
-      customProductInput.classList.toggle("hidden", productInput.value !== "Other");
-      buildPrompt();
-    });
-    benefitInput.addEventListener("change", () => {
-      customBenefitInput.classList.toggle("hidden", benefitInput.value !== "Other");
-      buildPrompt();
-    });
-    angleInput.addEventListener("change", () => {
-      customAngleInput.classList.toggle("hidden", angleInput.value !== "Other");
-      buildPrompt();
-    });
-
-    function buildPrompt() {
-      const category = categorySelect.value;
-      const style = styleSelect.value;
-      const product = productInput.value === "Other" ? customProductInput.value.trim() : productInput.value;
-      const benefit = benefitInput.value === "Other" ? customBenefitInput.value.trim() : benefitInput.value;
-      const angle = angleInput.value === "Other" ? customAngleInput.value.trim() : angleInput.value;
-
-      if (category && style && product && benefit && angle) {
-        const finalPrompt = `Create a ${style} style ${category.replace(/_/g, ' ')} prompt for my ${product} that helps with ${benefit}. It uses ${angle} as its unique angle to engage viewers and drive action.`;
-        typePrompt(finalPrompt);
-      }
-    }
-
-    function typePrompt(text) {
-      promptOutput.style.display = "block";
-      promptOutput.textContent = "";
-      copiedMsg.style.display = "none";
-      chatButtons.classList.add("hidden");
-      let i = 0;
-      const typing = setInterval(() => {
-        promptOutput.textContent += text.charAt(i);
-        i++;
-        if (i >= text.length) {
-          clearInterval(typing);
-          chatButtons.classList.remove("hidden");
-        }
-      }, 20);
-    }
-
-    function copyPrompt() {
-      navigator.clipboard.writeText(promptOutput.textContent).then(() => {
-        copiedMsg.style.display = "block";
-      });
     }
   </script>
 </body>
