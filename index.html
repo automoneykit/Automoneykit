@@ -1,159 +1,36 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AutoMoneyKit Prompt Launcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoMoneyKit Prompt Launcher – LiveLogic</title>
   <style>
-    body {
-      background-color: #000;
-      color: #0f0;
-      font-family: monospace;
-      padding: 20px;
-    }
-    select, input, button {
-      font-size: 16px;
-      margin: 10px 0;
-      display: block;
-    }
-    #promptBox {
-      border: 1px solid #0f0;
-      padding: 10px;
-      margin-top: 10px;
-      background: #111;
-      white-space: pre-wrap;
-    }
-    .hidden {
-      display: none;
-    }
-    #copiedMessage {
-      color: #0ff;
-      font-weight: bold;
-      margin-top: 10px;
-    }
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
+    h1 { color: #00ff88; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    select, input[type="text"] { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; font-size: 1rem; }
+    #promptOutput { background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px; border-radius: 5px; min-height: 100px; cursor: pointer; white-space: pre-wrap; display: none; }
+    .copied { color: #00ff88; font-size: 0.9em; margin-top: 5px; display: none; }
+    .hidden { display: none; }
+    button { padding: 10px 20px; margin-top: 10px; background: #00ff88; border: none; color: #111; font-weight: bold; border-radius: 5px; cursor: pointer; }
   </style>
 </head>
 <body>
-  <h1>AutoMoneyKit Prompt Launcher</h1>
+  <h1>🚀 AutoMoneyKit Prompt Launcher</h1>
+  <p style="font-size:1.2em; color:#00ff88;">Step 1: Pick the type of ad you're creating 👇</p>
 
-  <label for="category">Please select a category to get started:</label>
-  <select id="category" onchange="resetBelow('category')">
+  <label for="categorySelect">Select Category:</label>
+  <select id="categorySelect">
     <option value="">-- Choose Category --</option>
-    <option value="1">Viral Hooks</option>
-    <option value="2">Problem/Solution Templates</option>
-    <option value="3">Sales Copy</option>
-    <option value="4">TikTok Video Scripts</option>
-    <option value="5">Instagram Captions</option>
-    <option value="6">Email Openers</option>
+    <option value="viral_hooks">Viral Hooks – All Platforms</option>
+    <option value="problem_solution">Problem/Solution Templates</option>
+    <option value="sales_copy">Sales Page Copy Prompts</option>
+    <option value="video_scripts">TikTok + Reels Video Scripts</option>
+    <option value="instagram">Instagram Caption + Carousel Templates</option>
+    <option value="email">Email Subject Lines + Openers</option>
   </select>
 
-  <label for="style" class="hidden">Now select a prompt style:</label>
-  <select id="style" class="hidden" onchange="resetBelow('style')"></select>
-
-  <label for="product" class="hidden">3a – Product (what you’re promoting):</label>
-  <input id="product" class="hidden" oninput="buildPrompt()" placeholder="e.g. your AI tool">
-
-  <label for="outcome" class="hidden">3b – Outcome (what it helps with):</label>
-  <input id="outcome" class="hidden" oninput="buildPrompt()" placeholder="e.g. getting more leads">
-
-  <label for="angle" class="hidden">3c – Unique Angle or Hook:</label>
-  <input id="angle" class="hidden" oninput="buildPrompt()" placeholder="e.g. emotion, logic, speed, etc.">
-
-  <label for="visual" class="hidden">4a – Visual Outcome or Scene:</label>
-  <input id="visual" class="hidden" oninput="buildPrompt()" placeholder="e.g. demo screen, reaction face">
-
-  <label for="emotion" class="hidden">4b – Emotion to trigger:</label>
-  <input id="emotion" class="hidden" oninput="buildPrompt()" placeholder="e.g. relief, curiosity">
-
-  <label for="identity" class="hidden">5a – Identity Conflict:</label>
-  <input id="identity" class="hidden" oninput="buildPrompt()" placeholder="e.g. I used to feel lost...">
-
-  <label for="arc" class="hidden">5b – Transformation Arc:</label>
-  <input id="arc" class="hidden" oninput="buildPrompt()" placeholder="e.g. now it runs itself...">
-
-  <label for="cta" class="hidden">5c – Dopamine CTA:</label>
-  <input id="cta" class="hidden" oninput="buildPrompt()" placeholder="e.g. Tap to see how it works.">
-
-  <div id="promptBox" class="hidden">Waiting to auto build prompt...</div>
-  <button id="copyBtn" class="hidden" onclick="copyPrompt()">Copy Prompt</button>
-  <div id="copiedMessage" class="hidden">Copied!</div>
-  <div id="aiBtns" class="hidden">
-    <a href="https://chat.openai.com" target="_blank">Open ChatGPT</a> | 
-    <a href="https://claude.ai" target="_blank">Open Claude</a>
-  </div>
-
-  <script>
-    const styleDropdown = document.getElementById('style');
-    const promptBox = document.getElementById('promptBox');
-    const inputs = ['product','outcome','angle','visual','emotion','identity','arc','cta'];
-    const jsonMap = {
-      "1": "automoneykit_cat1_basic",
-      "2": "automoneykit_cat2_problem_solution_templates_basic",
-      "3": "AutoMoneyKit_Cat3_SalesCopy_Basic",
-      "4": "AutoMoneyKit_Cat4_TikTokScripts_Basic_Completed",
-      "5": "AutoMoneyKit_Cat5_InstagramCaptions_Basic_Completed",
-      "6": "AutoMoneyKit_Cat6_EmailOpeners_Basic_Completed"
-    };
-
-    let selectedPromptTemplate = "";
-
-    function resetBelow(level) {
-      document.getElementById('copiedMessage').classList.add('hidden');
-      document.getElementById('copyBtn').classList.add('hidden');
-      document.getElementById('aiBtns').classList.add('hidden');
-      promptBox.classList.add('hidden');
-      promptBox.innerText = "Waiting to auto build prompt...";
-
-      if (level === 'category') {
-        document.querySelector('label[for="style"]').classList.remove('hidden');
-        styleDropdown.classList.remove('hidden');
-        fetchStyleOptions();
-        inputs.forEach(id => document.getElementById(id).classList.add('hidden'));
-      } else if (level === 'style') {
-        inputs.forEach(id => {
-          document.getElementById(id).classList.remove('hidden');
-          document.querySelector('label[for="'+id+'"]').classList.remove('hidden');
-        });
-      }
-    }
-
-    async function fetchStyleOptions() {
-      const catVal = document.getElementById('category').value;
-      const file = jsonMap[catVal];
-      if (!file) return;
-      const res = await fetch(`https://automoneykit.github.io/Automoneykit/${file}.json`);
-      const data = await res.json();
-      const firstKey = Object.keys(data)[0];
-      const styleKeys = Object.keys(data[firstKey]);
-      styleDropdown.innerHTML = `<option value="">-- Choose Style --</option>` + styleKeys.map(key => `<option value="${key}">${key}</option>`).join('');
-      styleDropdown.onchange = () => {
-        selectedPromptTemplate = data[firstKey][styleDropdown.value][0];
-        resetBelow('style');
-      };
-    }
-
-    function buildPrompt() {
-      if (!selectedPromptTemplate) return;
-      const filled = selectedPromptTemplate
-        .replace("[Step 3a – PRODUCT]", document.getElementById('product').value)
-        .replace("[Step 3b – OUTCOME]", document.getElementById('outcome').value)
-        .replace("[Step 3c – ANGLE SLOT]", document.getElementById('angle').value)
-        .replace("[Step 4a – VISUAL OUTCOME SLOT]", document.getElementById('visual').value)
-        .replace("[Step 4b – EMOTION SLOT]", document.getElementById('emotion').value)
-        .replace("[Step 5a – IDENTITY CONFLICT]", document.getElementById('identity').value)
-        .replace("[Step 5b – TRANSFORMATION ARC]", document.getElementById('arc').value)
-        .replace("[Step 5c – DOPAMINE CTA]", document.getElementById('cta').value);
-      promptBox.classList.remove('hidden');
-      promptBox.innerText = filled;
-      document.getElementById('copyBtn').classList.remove('hidden');
-    }
-
-    function copyPrompt() {
-      navigator.clipboard.writeText(promptBox.innerText).then(() => {
-        document.getElementById('copiedMessage').classList.remove('hidden');
-        document.getElementById('aiBtns').classList.remove('hidden');
-      });
-    }
-  </script>
+  <!-- Core logic and prompt builder continues below in follow-up -->
 </body>
 </html>
