@@ -3,153 +3,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AutoMoneyKit Prompt Launcher – LiveLogic</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoMoneyKit Prompt Launcher</title>
   <style>
-    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
+    body { font-family: Arial, sans-serif; background-color: #111; color: #eee; padding: 20px; }
     h1 { color: #00ff88; }
     label { display: block; margin-top: 15px; font-weight: bold; }
-    select, input[type="text"] { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; font-size: 1rem; }
-    #promptOutput { background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px; border-radius: 5px; min-height: 100px; cursor: pointer; white-space: pre-wrap; display: none; }
+    select, input[type="text"], textarea {
+      width: 100%; padding: 10px; margin-top: 5px;
+      border-radius: 5px; border: none; font-size: 1rem;
+    }
+    #promptOutput {
+      background: #222; border: 1px solid #444;
+      padding: 15px; margin-top: 20px; border-radius: 5px;
+      min-height: 100px; white-space: pre-wrap;
+    }
     .copied { color: #00ff88; font-size: 0.9em; margin-top: 5px; display: none; }
-    .hidden { display: none; }
-    button { padding: 10px 20px; margin-top: 10px; background: #00ff88; border: none; color: #111; font-weight: bold; border-radius: 5px; cursor: pointer; }
+    button {
+      padding: 10px 20px; margin-top: 10px;
+      background: #00ff88; border: none; color: #111;
+      font-weight: bold; border-radius: 5px; cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <h1>🚀 AutoMoneyKit Prompt Launcher</h1>
-  <p style="font-size:1.2em; color:#00ff88;">Step 1: Pick the type of ad you're creating 👇</p>
-
-  <label for="categorySelect">Select Category:</label>
-  <select id="categorySelect">
-    <option value="">-- Choose Category --</option>
+  <label>Select Category:</label>
+  <select id="category">
     <option value="viral_hooks">Viral Hooks – All Platforms</option>
     <option value="problem_solution">Problem/Solution Templates</option>
-    <option value="sales_copy">Sales Page Copy Prompts</option>
+    <option value="sales_copy">Sales Page Copy</option>
     <option value="video_scripts">TikTok + Reels Video Scripts</option>
-    <option value="instagram">Instagram Caption + Carousel Templates</option>
+    <option value="instagram">Instagram Caption + Carousel</option>
     <option value="email">Email Subject Lines + Openers</option>
   </select>
 
-  <div id="styleWrapper" class="hidden">
-    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 2: Choose the vibe or layout of your ad 💡</p>
-    <label for="styleSelect">Now select a prompt style to view your prompt:</label>
-    <select id="styleSelect">
-      <option value="">-- Choose Style --</option>
-    </select>
-  </div>
+  <label>Now select a prompt style to view your prompt:</label>
+  <select id="style">
+    <option value="shock">shock</option>
+    <option value="curiosity">curiosity</option>
+    <option value="controversial">controversial</option>
+    <option value="emotional">emotional</option>
+    <option value="unexpected">unexpected</option>
+  </select>
 
-  <div id="inputsWrapper" class="hidden">
-    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 3: Tell us about your offer. Choose from lists or type your own ✍️</p>
-    <label for="productInput">What are you promoting?</label>
-    <input type="text" id="productInput" placeholder="e.g. Coaching Program" />
+  <label>What are you promoting?</label>
+  <input id="product" placeholder="e.g. Coaching Program"/>
 
-    <label for="benefitInput">What outcome does it create?</label>
-    <input type="text" id="benefitInput" placeholder="e.g. Saves time or boosts income" />
+  <label>What outcome does it create?</label>
+  <input id="outcome" placeholder="e.g. Saves time or boosts income"/>
 
-    <label for="angleInput">What is the unique angle?</label>
-    <input type="text" id="angleInput" placeholder="e.g. Emotional story or social proof" />
-  </div>
+  <label>What is the unique angle?</label>
+  <input id="angle" placeholder="e.g. Emotional story or social proof"/>
 
-  <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...</div>
+  <label>What will they see visually?</label>
+  <input id="visual" placeholder="e.g. dramatic before-and-after, jaw-dropping chart"/>
+
+  <label>What emotion does this trigger?</label>
+  <input id="emotion" placeholder="e.g. FOMO, relief, curiosity"/>
+
+  <label>What identity conflict does your audience face?</label>
+  <input id="conflict" placeholder="e.g. 'You're trying so hard but it's not working...'"/>
+
+  <label>What is their transformation arc?</label>
+  <input id="arc" placeholder="e.g. From confusion to clarity in minutes"/>
+
+  <label>Call to action?</label>
+  <input id="cta" placeholder="e.g. Tap here to see the proof"/>
+
+  <div id="promptOutput">Create a [prompt]...</div>
   <div class="copied" id="copiedMsg">✔ Prompt copied!</div>
-  <div id="chatButtons" class="hidden">
-    <button onclick="window.open('https://chat.openai.com/', '_blank')">Go to ChatGPT</button>
-    <button onclick="window.open('https://claude.ai/', '_blank')">Go to Claude</button>
-  </div>
+  <button onclick="copyPrompt()">Copy Prompt</button>
+  <button onclick="window.open('https://chat.openai.com/', '_blank')">Go to ChatGPT</button>
+  <button onclick="window.open('https://claude.ai/', '_blank')">Go to Claude</button>
 
   <script>
-    const categorySelect = document.getElementById("categorySelect");
-    const styleSelect = document.getElementById("styleSelect");
-    const styleWrapper = document.getElementById("styleWrapper");
-    const inputsWrapper = document.getElementById("inputsWrapper");
-    const promptOutput = document.getElementById("promptOutput");
-    const copiedMsg = document.getElementById("copiedMsg");
-    const chatButtons = document.getElementById("chatButtons");
-
-    const productInput = document.getElementById("productInput");
-    const benefitInput = document.getElementById("benefitInput");
-    const angleInput = document.getElementById("angleInput");
-
-    const styles = {
-      viral_hooks: ["shock", "curiosity", "controversial", "emotional", "unexpected"],
-      problem_solution: ["pain-point", "before-after", "case-study", "transformation", "logic-driven"],
-      sales_copy: ["headline", "bullet-points", "hero-intro", "objection-crusher", "urgency-based"],
-      video_scripts: ["fast-paced", "relatable", "skit-based", "testimonial", "tutorial-style"],
-      instagram: ["carousel-tips", "story-reveal", "value-post", "contrast-style", "hook-opener"],
-      email: ["curiosity", "urgency", "benefit", "story-lead", "personalized"]
-    };
-
-    categorySelect.addEventListener("change", () => {
-      resetAll();
-      const cat = categorySelect.value;
-      if (styles[cat]) {
-        styleSelect.innerHTML = '<option value="">-- Choose Style --</option>';
-        styles[cat].forEach(style => {
-          const opt = document.createElement("option");
-          opt.value = style;
-          opt.textContent = style;
-          styleSelect.appendChild(opt);
-        });
-        styleWrapper.classList.remove("hidden");
-        updatePrompt();  // Show base prompt immediately
-      }
-    });
-
-    styleSelect.addEventListener("change", () => {
-      inputsWrapper.classList.remove("hidden");
-      updatePrompt(); // Update with style
-    });
-
-    [productInput, benefitInput, angleInput].forEach(el => el.addEventListener("input", updatePrompt));
+    const fields = ['category', 'style', 'product', 'outcome', 'angle', 'visual', 'emotion', 'conflict', 'arc', 'cta'];
+    fields.forEach(id => document.getElementById(id).addEventListener("input", updatePrompt));
 
     function updatePrompt() {
-      const category = categorySelect.value;
-      const style = styleSelect.value;
-      const product = productInput.value.trim();
-      const benefit = benefitInput.value.trim();
-      const angle = angleInput.value.trim();
+      const get = id => document.getElementById(id).value.trim();
+      const prompt = `${get("conflict")} ${get("arc")}
+Create a ${get("category").replace("_", " ")} ad that highlights ${get("product")} by showing how it helps with ${get("outcome")}.
+It uses ${get("style")} ${get("angle")} to engage your audience with ${get("visual")} and triggers ${get("emotion")}.
+${get("cta")}`;
 
-      if (!category) return;
-
-      let prompt = `Create a ${style ? style + " style " : ""}${category.replace(/_/g, ' ')} prompt`;
-
-      if (product || benefit || angle) prompt += ` for my ${product || '[product]'} that helps with ${benefit || '[benefit]'}. It uses ${angle || '[angle]'} as its unique angle to engage viewers and drive action.`;
-
-      typePrompt(prompt);
-    }
-
-    function typePrompt(text) {
-      promptOutput.style.display = "block";
-      promptOutput.textContent = "";
-      copiedMsg.style.display = "none";
-      chatButtons.classList.add("hidden");
-      let i = 0;
-      const typing = setInterval(() => {
-        promptOutput.textContent += text.charAt(i);
-        i++;
-        if (i >= text.length) {
-          clearInterval(typing);
-          chatButtons.classList.remove("hidden");
-        }
-      }, 20);
-    }
-
-    function resetAll() {
-      styleSelect.innerHTML = '';
-      styleWrapper.classList.add("hidden");
-      inputsWrapper.classList.add("hidden");
-      promptOutput.style.display = "none";
-      chatButtons.classList.add("hidden");
-      copiedMsg.style.display = "none";
-      productInput.value = '';
-      benefitInput.value = '';
-      angleInput.value = '';
+      document.getElementById("promptOutput").textContent = prompt;
     }
 
     function copyPrompt() {
-      navigator.clipboard.writeText(promptOutput.textContent).then(() => {
-        copiedMsg.style.display = "block";
+      const text = document.getElementById("promptOutput").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        document.getElementById("copiedMsg").style.display = "block";
       });
     }
   </script>
