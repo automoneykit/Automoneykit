@@ -10,10 +10,11 @@
     h1 { color: #00ff88; }
     label { display: block; margin-top: 15px; font-weight: bold; }
     select, input[type="text"] { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; font-size: 1rem; }
-    #promptOutput { background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px; border-radius: 5px; min-height: 100px; cursor: pointer; white-space: pre-wrap; display: none; }
-    .copied { color: #00ff88; font-size: 0.9em; margin-top: 5px; display: none; }
+    #promptOutput { background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px; border-radius: 5px; min-height: 100px; cursor: pointer; white-space: pre-wrap; display: none; position: relative; }
+    .copiedInside { position: absolute; bottom: 5px; right: 10px; color: #00ff88; font-size: 0.9em; display: none; }
     .hidden { display: none; }
     button { padding: 10px 20px; margin-top: 10px; background: #00ff88; border: none; color: #111; font-weight: bold; border-radius: 5px; cursor: pointer; }
+    .extraPrompts { margin-top: 20px; padding: 10px; background: #333; border: 1px solid #444; border-radius: 5px; display: none; }
   </style>
 </head>
 <body>
@@ -40,137 +41,46 @@
   </div>
 
   <div id="inputsWrapper" class="hidden">
-    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 3: Tell us about your offer. Choose from lists or type your own ✍️</p>
+    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 3: Tell us about your offer 👇</p>
 
     <label for="productInput">What are you promoting?</label>
     <select id="productInput">
-      <option value="">-- Select Product --</option>
-      <option value="fitness app">Fitness App</option>
-      <option value="coaching program">Coaching Program</option>
-      <option value="email service">Email Service</option>
-      <option value="AI tool">AI Tool</option>
+      <option value="">-- Select or Choose Other --</option>
+      <option>Coaching Program</option>
+      <option>Online Course</option>
+      <option>Fitness App</option>
+      <option>Template Bundle</option>
+      <option value="other">Other</option>
     </select>
+    <input type="text" id="productOther" placeholder="Enter your product..." class="hidden" />
 
     <label for="benefitInput">What outcome does it create?</label>
     <select id="benefitInput">
-      <option value="">-- Select Outcome --</option>
-      <option value="boosts confidence">Boosts Confidence</option>
-      <option value="saves time">Saves Time</option>
-      <option value="grows revenue">Grows Revenue</option>
-      <option value="improves engagement">Improves Engagement</option>
+      <option value="">-- Select or Choose Other --</option>
+      <option>Saves time</option>
+      <option>Boosts income</option>
+      <option>Reduces stress</option>
+      <option>Increases productivity</option>
+      <option value="other">Other</option>
     </select>
+    <input type="text" id="benefitOther" placeholder="Enter your outcome..." class="hidden" />
 
-    <label for="angleInput">What is the unique angle?</label>
-    <select id="angleInput">
-      <option value="">-- Select Angle --</option>
-      <option value="personal story">Personal Story</option>
-      <option value="social proof">Social Proof</option>
-      <option value="humour">Humour</option>
-      <option value="curiosity trigger">Curiosity Trigger</option>
-    </select>
+    <label for="angleInput">What is the unique angle? <em>(Premium only)</em></label>
+    <input type="text" id="angleInput" placeholder="e.g. Emotional story or social proof" />
   </div>
 
-  <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...</div>
-  <div class="copied" id="copiedMsg">✔ Prompt copied!</div>
+  <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...
+    <span id="copiedMsg" class="copiedInside">✔ Copied!</span>
+  </div>
+
   <div id="chatButtons" class="hidden">
     <button onclick="window.open('https://chat.openai.com/', '_blank')">Go to ChatGPT</button>
     <button onclick="window.open('https://claude.ai/', '_blank')">Go to Claude</button>
   </div>
 
-  <script>
-    const categorySelect = document.getElementById("categorySelect");
-    const styleSelect = document.getElementById("styleSelect");
-    const styleWrapper = document.getElementById("styleWrapper");
-    const inputsWrapper = document.getElementById("inputsWrapper");
-    const promptOutput = document.getElementById("promptOutput");
-    const copiedMsg = document.getElementById("copiedMsg");
-    const chatButtons = document.getElementById("chatButtons");
-
-    const productInput = document.getElementById("productInput");
-    const benefitInput = document.getElementById("benefitInput");
-    const angleInput = document.getElementById("angleInput");
-
-    const styles = {
-      viral_hooks: ["shock", "curiosity", "controversial", "emotional", "unexpected"],
-      problem_solution: ["pain-point", "before-after", "case-study", "transformation", "logic-driven"],
-      sales_copy: ["headline", "bullet-points", "hero-intro", "objection-crusher", "urgency-based"],
-      video_scripts: ["fast-paced", "relatable", "skit-based", "testimonial", "tutorial-style"],
-      instagram: ["carousel-tips", "story-reveal", "value-post", "contrast-style", "hook-opener"],
-      email: ["curiosity", "urgency", "benefit", "story-lead", "personalized"]
-    };
-
-    categorySelect.addEventListener("change", () => {
-      resetAll();
-      const cat = categorySelect.value;
-      if (styles[cat]) {
-        styleSelect.innerHTML = '<option value="">-- Choose Style --</option>';
-        styles[cat].forEach(style => {
-          const opt = document.createElement("option");
-          opt.value = style;
-          opt.textContent = style;
-          styleSelect.appendChild(opt);
-        });
-        styleWrapper.classList.remove("hidden");
-        updatePrompt();  // Show base prompt immediately
-      }
-    });
-
-    styleSelect.addEventListener("change", () => {
-      inputsWrapper.classList.remove("hidden");
-      updatePrompt(); // Update with style
-    });
-
-    [productInput, benefitInput, angleInput].forEach(el => el.addEventListener("change", updatePrompt));
-
-    function updatePrompt() {
-      const category = categorySelect.value;
-      const style = styleSelect.value;
-      const product = productInput.value;
-      const benefit = benefitInput.value;
-      const angle = angleInput.value;
-
-      if (!category) return;
-
-      let prompt = `Create a ${style ? style + " style " : ""}${category.replace(/_/g, ' ')} prompt`;
-
-      if (product || benefit || angle) prompt += ` for my ${product || '[product]'} that helps with ${benefit || '[benefit]'}. It uses ${angle || '[angle]'} as its unique angle to engage viewers and drive action.`;
-
-      typePrompt(prompt);
-    }
-
-    function typePrompt(text) {
-      promptOutput.style.display = "block";
-      promptOutput.textContent = "";
-      copiedMsg.style.display = "none";
-      chatButtons.classList.add("hidden");
-      let i = 0;
-      const typing = setInterval(() => {
-        promptOutput.textContent += text.charAt(i);
-        i++;
-        if (i >= text.length) {
-          clearInterval(typing);
-          chatButtons.classList.remove("hidden");
-        }
-      }, 20);
-    }
-
-    function resetAll() {
-      styleSelect.innerHTML = '';
-      styleWrapper.classList.add("hidden");
-      inputsWrapper.classList.add("hidden");
-      promptOutput.style.display = "none";
-      chatButtons.classList.add("hidden");
-      copiedMsg.style.display = "none";
-      productInput.value = '';
-      benefitInput.value = '';
-      angleInput.value = '';
-    }
-
-    function copyPrompt() {
-      navigator.clipboard.writeText(promptOutput.textContent).then(() => {
-        copiedMsg.style.display = "block";
-      });
-    }
-  </script>
+  <div id="extraPromptSection" class="hidden">
+    <button onclick="showExtras()">Prompts are Ready — Click here to view more variations</button>
+    <div class="extraPrompts" id="extraPrompts">[Extra prompts from JSON will load here]</div>
+  </div>
 </body>
 </html>
