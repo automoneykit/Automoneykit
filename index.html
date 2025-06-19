@@ -3,54 +3,179 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AutoMoneyKit Prompt Launcher – Master Tier</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoMoneyKit Prompt Launcher</title>
   <style>
     body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
     h1 { color: #00ff88; }
     label { display: block; margin-top: 15px; font-weight: bold; }
-    select, input[type="text"] { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; font-size: 1rem; }
-    #promptOutput { background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px; border-radius: 5px; min-height: 100px; cursor: pointer; white-space: pre-wrap; display: none; }
+    select, input[type="text"] {
+      width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px;
+      border: none; font-size: 1rem;
+    }
+    #promptOutput {
+      background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px;
+      border-radius: 5px; min-height: 100px; white-space: pre-wrap; display: none;
+      cursor: pointer;
+    }
     .copied { color: #00ff88; font-size: 0.9em; margin-top: 5px; display: none; }
     .hidden { display: none; }
-    button { padding: 10px 20px; margin-top: 10px; background: #00ff88; border: none; color: #111; font-weight: bold; border-radius: 5px; cursor: pointer; }
+    button {
+      padding: 10px 20px; margin-top: 10px; background: #00ff88;
+      border: none; color: #111; font-weight: bold; border-radius: 5px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
   <h1>🚀 AutoMoneyKit Prompt Launcher</h1>
-  <label for="category">Select Category:</label>
-  <select id="category" onchange="loadCategory(this.value)">
+  <p style="font-size:1.2em; color:#00ff88;">Step 1: Pick the type of ad you're creating 👇</p>
+
+  <label for="categorySelect">Select Category:</label>
+  <select id="categorySelect">
     <option value="">-- Choose Category --</option>
     <option value="viral_hooks">Viral Hooks – All Platforms</option>
-    <option value="problem_solution">Problem/Solution Templates</option>
+    <option value="problem_solution_templates">Problem/Solution Templates</option>
     <option value="sales_copy">Sales Page Copy Prompts</option>
     <option value="video_scripts">TikTok + Reels Video Scripts</option>
     <option value="instagram">Instagram Caption + Carousel Templates</option>
     <option value="email">Email Subject Lines + Openers</option>
   </select>
 
-  <div id="promptOutput">Waiting to auto build prompt...</div>
+  <div id="styleWrapper" class="hidden">
+    <label for="styleSelect">Now select a prompt style to view your prompt:</label>
+    <select id="styleSelect"></select>
+  </div>
+
+  <div id="inputWrapper" class="hidden">
+    <label for="productInput">What are you promoting?</label>
+    <input type="text" id="productInput" placeholder="e.g. Coaching Program" />
+    <label for="benefitInput">What outcome does it create?</label>
+    <input type="text" id="benefitInput" placeholder="e.g. Saves time or boosts income" />
+    <label for="angleInput">What is the unique angle?</label>
+    <input type="text" id="angleInput" placeholder="e.g. Emotional story or social proof" />
+  </div>
+
+  <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...</div>
   <div class="copied" id="copiedMsg">✔ Prompt copied!</div>
+
   <div id="chatButtons" class="hidden">
     <button onclick="window.open('https://chat.openai.com/', '_blank')">Go to ChatGPT</button>
     <button onclick="window.open('https://claude.ai/', '_blank')">Go to Claude</button>
   </div>
 
   <script>
-    function loadCategory(val) {
-      const catMap = {
-        "viral_hooks": "automoneykit_cat1_basic.json",
-        "problem_solution": "automoneykit_cat2_problem_solution_templates_basic.json",
-        "sales_copy": "AutoMoneyKit_Cat3_SalesCopy_Basic.json",
-        "video_scripts": "AutoMoneyKit_Cat4_TikTokScripts_Basic_Completed.json",
-        "instagram": "AutoMoneyKit_Cat5_InstagramCaptions_Basic_Completed.json",
-        "email": "AutoMoneyKit_Cat6_EmailOpeners_Basic_Completed.json"
-      };
-      const fileName = catMap[val];
-      if (fileName) {
-        document.getElementById("promptOutput").textContent = `Loading: ${fileName}`;
-        document.getElementById("promptOutput").style.display = "block";
+    const categoryMap = {
+      viral_hooks: "automoneykit_cat1_basic.json",
+      problem_solution_templates: "automoneykit_cat2_problem_solution_templates_basic.json",
+      sales_copy: "AutoMoneyKit_Cat3_SalesCopy_Basic.json",
+      video_scripts: "AutoMoneyKit_Cat4_TikTokScripts_Basic_Completed.json",
+      instagram: "AutoMoneyKit_Cat5_InstagramCaptions_Basic_Completed.json",
+      email: "AutoMoneyKit_Cat6_EmailOpeners_Basic_Completed.json"
+    };
+
+    const styleMap = {
+      viral_hooks: ["shock", "curiosity", "controversial", "emotional", "unexpected"],
+      problem_solution_templates: ["pain-point", "before-after", "case-study", "transformation", "logic-driven"],
+      sales_copy: ["headline", "bullet-points", "hero-intro", "objection-crusher", "urgency-based"],
+      video_scripts: ["fast-paced", "relatable", "skit-based", "testimonial", "tutorial-style"],
+      instagram: ["carousel-tips", "story-reveal", "value-post", "contrast-style", "hook-opener"],
+      email: ["curiosity", "urgency", "benefit", "story-lead", "personalized"]
+    };
+
+    const catSelect = document.getElementById("categorySelect");
+    const styleSelect = document.getElementById("styleSelect");
+    const styleWrapper = document.getElementById("styleWrapper");
+    const inputWrapper = document.getElementById("inputWrapper");
+    const productInput = document.getElementById("productInput");
+    const benefitInput = document.getElementById("benefitInput");
+    const angleInput = document.getElementById("angleInput");
+    const promptOutput = document.getElementById("promptOutput");
+    const copiedMsg = document.getElementById("copiedMsg");
+    const chatButtons = document.getElementById("chatButtons");
+
+    function resetAll() {
+      styleWrapper.classList.add("hidden");
+      inputWrapper.classList.add("hidden");
+      promptOutput.textContent = "";
+      promptOutput.style.display = "none";
+      copiedMsg.style.display = "none";
+      chatButtons.classList.add("hidden");
+      styleSelect.innerHTML = "";
+      productInput.value = "";
+      benefitInput.value = "";
+      angleInput.value = "";
+    }
+
+    catSelect.addEventListener("change", () => {
+      resetAll();
+      const cat = catSelect.value;
+      if (!cat) return;
+      loadPromptBase(cat);
+      styleSelect.innerHTML = '<option value="">-- Choose Style --</option>';
+      styleMap[cat].forEach(style => {
+        const opt = document.createElement("option");
+        opt.value = style;
+        opt.textContent = style;
+        styleSelect.appendChild(opt);
+      });
+      styleWrapper.classList.remove("hidden");
+      promptOutput.style.display = "block";
+      typePrompt(`Create a [${cat}] prompt...`);
+    });
+
+    styleSelect.addEventListener("change", () => {
+      const style = styleSelect.value;
+      if (style) {
+        typePrompt(`Create a ${style} style [${catSelect.value}] prompt...`);
+        inputWrapper.classList.remove("hidden");
       }
+    });
+
+    [productInput, benefitInput, angleInput].forEach(input => {
+      input.addEventListener("input", () => {
+        buildPrompt();
+      });
+    });
+
+    function buildPrompt() {
+      const product = productInput.value.trim();
+      const benefit = benefitInput.value.trim();
+      const angle = angleInput.value.trim();
+      const category = catSelect.value;
+      const style = styleSelect.value;
+
+      if (product && benefit && angle && category && style) {
+        const finalPrompt = `Create a ${style} style ${category.replace(/_/g, " ")} prompt for my ${product} that helps with ${benefit}. It uses ${angle} as its unique angle to engage viewers and drive action.`;
+        typePrompt(finalPrompt);
+      }
+    }
+
+    function typePrompt(text) {
+      promptOutput.style.display = "block";
+      promptOutput.textContent = "";
+      copiedMsg.style.display = "none";
+      chatButtons.classList.add("hidden");
+      let i = 0;
+      const interval = setInterval(() => {
+        promptOutput.textContent += text.charAt(i);
+        i++;
+        if (i >= text.length) {
+          clearInterval(interval);
+          chatButtons.classList.remove("hidden");
+        }
+      }, 18);
+    }
+
+    function copyPrompt() {
+      navigator.clipboard.writeText(promptOutput.textContent).then(() => {
+        copiedMsg.style.display = "block";
+      });
+    }
+
+    function loadPromptBase(catKey) {
+      const jsonFile = categoryMap[catKey];
+      console.log("📂 Loading:", jsonFile);
     }
   </script>
 </body>
