@@ -3,46 +3,24 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>AutoMoneyKit Prompt Launcher</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AutoMoneyKit Prompt Launcher – LiveLogic</title>
   <style>
-    body { background-color: #111; color: #eee; font-family: Arial, sans-serif; padding: 20px; }
+    body { font-family: Arial, sans-serif; background: #111; color: #eee; padding: 20px; }
     h1 { color: #00ff88; }
     label { display: block; margin-top: 15px; font-weight: bold; }
     select, input[type="text"] { width: 100%; padding: 10px; margin-top: 5px; border-radius: 5px; border: none; font-size: 1rem; }
-    #promptOutput {
-      background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px;
-      border-radius: 5px; min-height: 100px; white-space: pre-wrap; display: none;
-      position: relative;
-    }
-    .copied {
-      color: #00ff88; font-size: 0.9em;
-      position: absolute; bottom: 5px; right: 10px;
-      display: none;
-    }
+    #promptOutput { background: #222; border: 1px solid #444; padding: 15px; margin-top: 20px; border-radius: 5px; min-height: 100px; cursor: pointer; white-space: pre-wrap; display: none; position: relative; }
+    .copiedInside { position: absolute; bottom: 5px; right: 10px; color: #00ff88; font-size: 0.9em; display: none; }
     .hidden { display: none; }
-    button {
-      padding: 10px 20px; margin-top: 10px;
-      background: #00ff88; border: none; color: #111;
-      font-weight: bold; border-radius: 5px; cursor: pointer;
-    }
-    .top-right {
-      position: absolute; top: 20px; right: 20px;
-    }
+    button { padding: 10px 20px; margin-top: 10px; background: #00ff88; border: none; color: #111; font-weight: bold; border-radius: 5px; cursor: pointer; }
+    .extraPrompts { margin-top: 20px; padding: 10px; background: #333; border: 1px solid #444; border-radius: 5px; display: none; }
   </style>
 </head>
 <body>
-  <div class="top-right">
-    <label for="tierSelect">Tier:</label>
-    <select id="tierSelect">
-      <option value="basic">Basic</option>
-      <option value="premium">Premium</option>
-      <option value="elite">Elite</option>
-      <option value="master">Master</option>
-    </select>
-  </div>
-
   <h1>🚀 AutoMoneyKit Prompt Launcher</h1>
+  <p style="font-size:1.2em; color:#00ff88;">Step 1: Pick the type of ad you're creating 👇</p>
+
   <label for="categorySelect">Select Category:</label>
   <select id="categorySelect">
     <option value="">-- Choose Category --</option>
@@ -55,6 +33,7 @@
   </select>
 
   <div id="styleWrapper" class="hidden">
+    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 2: Choose the vibe or layout of your ad 💡</p>
     <label for="styleSelect">Now select a prompt style to view your prompt:</label>
     <select id="styleSelect">
       <option value="">-- Choose Style --</option>
@@ -62,50 +41,36 @@
   </div>
 
   <div id="inputsWrapper" class="hidden">
+    <p style="font-size:1.2em; color:#00ff88; margin-top:20px;">Step 3: Tell us about your offer 👇</p>
+
     <label for="productInput">What are you promoting?</label>
     <select id="productInput">
-      <option value="">-- Choose --</option>
-      <option value="mobile app">Mobile App</option>
-      <option value="coaching program">Coaching Program</option>
-      <option value="online course">Online Course</option>
-      <option value="digital template">Digital Template</option>
-      <option value="ecommerce store">Ecommerce Store</option>
-      <option value="affiliate offer">Affiliate Offer</option>
-      <option value="Other">Other</option>
+      <option value="">-- Select or Choose Other --</option>
+      <option>Coaching Program</option>
+      <option>Online Course</option>
+      <option>Fitness App</option>
+      <option>Template Bundle</option>
+      <option value="other">Other</option>
     </select>
-    <input type="text" id="customProduct" placeholder="Type your own..." class="hidden"/>
+    <input type="text" id="productOther" placeholder="Enter your product..." class="hidden" />
 
     <label for="benefitInput">What outcome does it create?</label>
     <select id="benefitInput">
-      <option value="">-- Choose --</option>
-      <option value="saving time">Saving Time</option>
-      <option value="making money">Making Money</option>
-      <option value="reducing stress">Reducing Stress</option>
-      <option value="building confidence">Building Confidence</option>
-      <option value="Other">Other</option>
+      <option value="">-- Select or Choose Other --</option>
+      <option>Saves time</option>
+      <option>Boosts income</option>
+      <option>Reduces stress</option>
+      <option>Increases productivity</option>
+      <option value="other">Other</option>
     </select>
-    <input type="text" id="customBenefit" placeholder="Type your own..." class="hidden"/>
+    <input type="text" id="benefitOther" placeholder="Enter your outcome..." class="hidden" />
 
-    <div id="angleWrapper" class="hidden">
-      <label for="angleInput">What is the unique angle?</label>
-      <select id="angleInput">
-        <option value="">-- Choose --</option>
-        <option value="humour">Humour</option>
-        <option value="urgency">Urgency</option>
-        <option value="emotional story">Emotional Story</option>
-        <option value="authority">Authority</option>
-        <option value="Other">Other</option>
-      </select>
-      <input type="text" id="customAngle" placeholder="Type your own..." class="hidden"/>
-    </div>
+    <label for="angleInput">What is the unique angle? <em>(Premium only)</em></label>
+    <input type="text" id="angleInput" placeholder="e.g. Emotional story or social proof" />
   </div>
 
   <div id="promptOutput" onclick="copyPrompt()">Waiting to auto build prompt...
-    <div class="copied" id="copiedMsg">✔ Copied!</div>
-  </div>
-
-  <div id="extraPrompts" class="hidden">
-    <a href="#" onclick="alert('Display other 9 prompts (not yet wired).')">Click here to view the 9 other prompt variations</a>
+    <span id="copiedMsg" class="copiedInside">✔ Copied!</span>
   </div>
 
   <div id="chatButtons" class="hidden">
@@ -113,94 +78,9 @@
     <button onclick="window.open('https://claude.ai/', '_blank')">Go to Claude</button>
   </div>
 
-  <script>
-    const tierSelect = document.getElementById("tierSelect");
-    const categorySelect = document.getElementById("categorySelect");
-    const styleSelect = document.getElementById("styleSelect");
-    const productInput = document.getElementById("productInput");
-    const benefitInput = document.getElementById("benefitInput");
-    const angleInput = document.getElementById("angleInput");
-    const customProduct = document.getElementById("customProduct");
-    const customBenefit = document.getElementById("customBenefit");
-    const customAngle = document.getElementById("customAngle");
-
-    const promptOutput = document.getElementById("promptOutput");
-    const copiedMsg = document.getElementById("copiedMsg");
-    const chatButtons = document.getElementById("chatButtons");
-    const styleWrapper = document.getElementById("styleWrapper");
-    const inputsWrapper = document.getElementById("inputsWrapper");
-    const angleWrapper = document.getElementById("angleWrapper");
-
-    categorySelect.addEventListener("change", () => {
-      styleWrapper.classList.remove("hidden");
-      resetPrompt();
-    });
-
-    styleSelect.addEventListener("change", () => {
-      inputsWrapper.classList.remove("hidden");
-      buildPrompt();
-    });
-
-    [productInput, benefitInput, angleInput, customProduct, customBenefit, customAngle].forEach(el =>
-      el.addEventListener("input", buildPrompt)
-    );
-
-    productInput.addEventListener("change", () => {
-      customProduct.classList.toggle("hidden", productInput.value !== "Other");
-      buildPrompt();
-    });
-    benefitInput.addEventListener("change", () => {
-      customBenefit.classList.toggle("hidden", benefitInput.value !== "Other");
-      buildPrompt();
-    });
-    angleInput.addEventListener("change", () => {
-      customAngle.classList.toggle("hidden", angleInput.value !== "Other");
-      buildPrompt();
-    });
-
-    tierSelect.addEventListener("change", () => {
-      const tier = tierSelect.value;
-      if (tier === "basic") angleWrapper.classList.add("hidden");
-      else angleWrapper.classList.remove("hidden");
-      buildPrompt();
-    });
-
-    function buildPrompt() {
-      const category = categorySelect.value.replace(/_/g, " ");
-      const style = styleSelect.value;
-      const tier = tierSelect.value;
-      const product = productInput.value === "Other" ? customProduct.value.trim() : productInput.value;
-      const benefit = benefitInput.value === "Other" ? customBenefit.value.trim() : benefitInput.value;
-      const angle = angleInput.value === "Other" ? customAngle.value.trim() : angleInput.value;
-
-      if (!category || !style) return;
-
-      let prompt = `Create a ${style} style ${category} prompt`;
-      if (product) prompt += ` for my ${product}`;
-      if (benefit) prompt += ` that helps with ${benefit}`;
-      if (tier !== "basic" && angle) prompt += `. It uses ${angle} as its unique angle to engage viewers and drive action.`;
-
-      typePrompt(prompt);
-    }
-
-    function typePrompt(text) {
-      promptOutput.style.display = "block";
-      promptOutput.textContent = text;
-      copiedMsg.style.display = "none";
-      chatButtons.classList.remove("hidden");
-    }
-
-    function resetPrompt() {
-      promptOutput.style.display = "none";
-      copiedMsg.style.display = "none";
-      chatButtons.classList.add("hidden");
-    }
-
-    function copyPrompt() {
-      navigator.clipboard.writeText(promptOutput.textContent).then(() => {
-        copiedMsg.style.display = "block";
-      });
-    }
-  </script>
+  <div id="extraPromptSection" class="hidden">
+    <button onclick="showExtras()">Prompts are Ready — Click here to view more variations</button>
+    <div class="extraPrompts" id="extraPrompts">[Extra prompts from JSON will load here]</div>
+  </div>
 </body>
 </html>
