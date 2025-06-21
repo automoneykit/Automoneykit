@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>AutoMoneyKit Prompt Launcher</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      padding: 20px;
+    }
+    h1 {
+      color: #00ff88;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>AutoMoneyKit Prompt Launcher</h1>
+
+  <label>Tier:</label>
+  <select id="tier" onchange="onTierChange()">
+    <option value="">Select a Tier</option>
+    <option value="basic">Basic</option>
+    <option value="premium">Premium</option>
+    <option value="elite">Elite</option>
+    <option value="master">Master</option>
+  </select>
+
+  <label>Category:</label>
+  <select id="category" onchange="onCategoryChange()">
+    <option value="">Select a Category</option>
+    <option value="viral_hooks">Viral Hooks</option>
+    <option value="problem_solution_templates">Problem/Solution Templates</option>
+    <option value="sales_copy">Sales Copy</option>
+    <option value="tiktok_scripts">TikTok Scripts</option>
+    <option value="instagram_captions">Instagram Captions</option>
+    <option value="email_openers">Email Openers</option>
+  </select>
+
+  <div id="styleContainer" style="display:none;">
+    <label>Style:</label>
+    <select id="style">
+      <option value="">Select a Style</option>
+    </select>
+  </div>
+
+  <script>
+    const stylesByCategory = {
+      viral_hooks: ["shock", "humor", "curiosity", "controversy", "relatable"],
+      problem_solution_templates: ["obvious problem", "hidden problem", "aspiration gap", "before/after", "myth busting"],
+      sales_copy: ["urgency", "scarcity", "proof", "story", "logic"],
+      tiktok_scripts: ["hook-first", "skit", "day-in-life", "before-after", "voiceover"],
+      instagram_captions: ["carousel", "listicle", "quote", "personal story", "teaser"],
+      email_openers: ["bold question", "pain point", "surprise", "number drop", "short + punchy"]
+    };
+
+    function onTierChange() {
+      document.getElementById("category").value = "";
+      document.getElementById("style").innerHTML = '<option value="">Select a Style</option>';
+      document.getElementById("styleContainer").style.display = "none";
+    }
+
+    function onCategoryChange() {
+      const category = document.getElementById("category").value;
+      const styleSelect = document.getElementById("style");
+      styleSelect.innerHTML = '<option value="">Select a Style</option>';
+
+      if (stylesByCategory[category]) {
+        stylesByCategory[category].forEach(style => {
+          const opt = document.createElement("option");
+          opt.value = style;
+          opt.textContent = style.charAt(0).toUpperCase() + style.slice(1);
+          styleSelect.appendChild(opt);
+        });
+        document.getElementById("styleContainer").style.display = "block";
+      } else {
+        document.getElementById("styleContainer").style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
