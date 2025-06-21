@@ -12,136 +12,203 @@
       color: #eee;
       padding: 20px;
     }
-    h1 {
-      color: #00ff88;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
+    h1 { color: #00ff88; line-height: 1.2em; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
     select, input {
-      width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: none;
-      font-size: 1rem;
-    }
-    .hidden {
-      display: none;
+      width: 100%; padding: 10px; margin-top: 5px;
+      border-radius: 5px; border: none; font-size: 1rem;
     }
     .prompt-box {
-      background: #222;
-      border: 1px solid #444;
-      padding: 15px;
-      margin-top: 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      white-space: pre-wrap;
+      background: #222; border: 1px solid #444;
+      padding: 15px; margin-top: 20px; border-radius: 5px;
+      white-space: pre-wrap; cursor: pointer;
     }
     #copiedMessage {
       color: #00ff88;
       display: none;
     }
+    .more-prompts {
+      margin-top: 10px;
+      display: none;
+    }
+    .prompt-variation {
+      background: #1c1c1c;
+      border: 1px solid #333;
+      border-radius: 5px;
+      padding: 10px;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+    .action-buttons {
+      display: none;
+      margin-top: 15px;
+    }
+    .action-buttons button {
+      margin-right: 10px;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      background: #00ff88;
+      color: #111;
+      font-weight: bold;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <h1>AutoMoneyKit<br>Prompt Launcher</h1>
+  <h1>AutoMoneyKit<br>Prompt<br>Launcher</h1>
 
-  <label>Tier:</label>
-  <select id="tier" onchange="resetFields()">
-    <option value="">Select Tier</option>
-    <option value="basic">Basic</option>
-    <option value="premium">Premium</option>
-    <option value="elite">Elite</option>
-    <option value="master">Master</option>
+  <label for="tier">Tier:</label>
+  <select id="tier">
+    <option value="Basic">Basic</option>
+    <option disabled>Premium</option>
+    <option disabled>Elite</option>
+    <option disabled>Master</option>
   </select>
 
-  <label>Category:</label>
-  <select id="category" onchange="onCategoryChange()" disabled>
-    <option value="">Select Category</option>
-    <option value="viral_hooks">Viral Hooks</option>
-    <option value="problem_solution_templates">Problem/Solution Templates</option>
-    <option value="sales_copy">Sales Copy</option>
-    <option value="tiktok_scripts">TikTok Scripts</option>
-    <option value="instagram_captions">Instagram Captions</option>
-    <option value="email_openers">Email Openers</option>
+  <label for="category">Category:</label>
+  <select id="category">
+    <option value="">Select a Category</option>
+    <option value="viral hooks">Viral Hooks</option>
+    <option value="problem solution">Problem/Solution</option>
   </select>
 
-  <div id="styleBlock" class="hidden">
-    <label>Style:</label>
-    <select id="style" onchange="buildPrompt()">
-      <option value="">Select Style</option>
+  <div id="style-container" style="display:none;">
+    <label for="style">Style:</label>
+    <select id="style">
+      <option value="">Select a Style</option>
+      <option value="shock">Shock</option>
+      <option value="humor">Humor</option>
     </select>
   </div>
 
-  <div id="promptBox" class="prompt-box hidden" onclick="copyPrompt()"></div>
-  <p id="copiedMessage">✅ Prompt Copied!</p>
+  <div id="product-container" style="display:none;">
+    <label for="product">Step 3a – Product:</label>
+    <input id="product" type="text" placeholder="e.g. your fitness tracker" />
+  </div>
+
+  <div id="outcome-container" style="display:none;">
+    <label for="outcome">Step 3b – Outcome:</label>
+    <input id="outcome" type="text" placeholder="e.g. staying motivated" />
+  </div>
+
+  <div id="prompt-box" class="prompt-box" style="display:none;" onclick="copyPrompt()"></div>
+  <p id="copiedMessage">✅ Copied!</p>
+
+  <a id="showMoreLink" href="#" style="display:none; color:#00ff88;" onclick="showMore(event)">Show More</a>
+  <div class="more-prompts" id="morePrompts"></div>
+
+  <div class="action-buttons" id="actionButtons">
+    <button onclick="alert('Open ChatGPT')">ChatGPT</button>
+    <button onclick="alert('Open Claude')">Claude</button>
+  </div>
 
   <script>
-    const styles = {
-      viral_hooks: ["shock", "humor", "curiosity", "controversy", "relatable"],
-      problem_solution_templates: ["obvious problem", "hidden problem", "aspiration gap", "before/after", "myth busting"],
-      sales_copy: ["urgency", "scarcity", "proof", "story", "logic"],
-      tiktok_scripts: ["hook-first", "skit", "day-in-life", "before-after", "voiceover"],
-      instagram_captions: ["carousel", "listicle", "quote", "personal story", "teaser"],
-      email_openers: ["bold question", "pain point", "surprise", "number drop", "short + punchy"]
-    };
+    const tierSelect = document.getElementById('tier');
+    const categorySelect = document.getElementById('category');
+    const styleSelect = document.getElementById('style');
+    const styleContainer = document.getElementById('style-container');
+    const productInput = document.getElementById('product');
+    const outcomeInput = document.getElementById('outcome');
+    const productContainer = document.getElementById('product-container');
+    const outcomeContainer = document.getElementById('outcome-container');
+    const promptBox = document.getElementById('prompt-box');
+    const copiedMessage = document.getElementById('copiedMessage');
+    const showMoreLink = document.getElementById('showMoreLink');
+    const morePrompts = document.getElementById('morePrompts');
+    const actionButtons = document.getElementById('actionButtons');
 
-    function resetFields() {
-      document.getElementById("category").disabled = false;
-      document.getElementById("category").value = "";
-      document.getElementById("styleBlock").classList.add("hidden");
-      document.getElementById("style").innerHTML = '<option value="">Select Style</option>';
-      document.getElementById("promptBox").classList.add("hidden");
-      document.getElementById("promptBox").textContent = "";
+    function resetAll() {
+      categorySelect.selectedIndex = 0;
+      resetBelow('tier');
     }
 
-    function onCategoryChange() {
-      const category = document.getElementById("category").value;
-      const styleSelect = document.getElementById("style");
-
-      if (category && styles[category]) {
-        styleSelect.innerHTML = '<option value="">Select Style</option>';
-        styles[category].forEach(style => {
-          const opt = document.createElement("option");
-          opt.value = style;
-          opt.textContent = style.charAt(0).toUpperCase() + style.slice(1);
-          styleSelect.appendChild(opt);
-        });
-        document.getElementById("styleBlock").classList.remove("hidden");
-
-        // Build partial prompt from category
-        const promptBox = document.getElementById("promptBox");
-        promptBox.textContent = `Create a ${category.replace(/_/g, ' ')} ad that highlights ___ by showing how it helps with ___.`;
-        promptBox.classList.remove("hidden");
-      } else {
-        document.getElementById("styleBlock").classList.add("hidden");
-        document.getElementById("promptBox").classList.add("hidden");
+    function resetBelow(level) {
+      if (level === 'tier' || level === 'category') {
+        styleSelect.selectedIndex = 0;
+        styleContainer.style.display = 'none';
+      }
+      if (level !== 'style') {
+        productInput.value = '';
+        outcomeInput.value = '';
+        productContainer.style.display = 'none';
+        outcomeContainer.style.display = 'none';
+        promptBox.style.display = 'none';
+        copiedMessage.style.display = 'none';
+        showMoreLink.style.display = 'none';
+        morePrompts.innerHTML = '';
+        morePrompts.style.display = 'none';
+        actionButtons.style.display = 'none';
       }
     }
 
-    function buildPrompt() {
-      const category = document.getElementById("category").value;
-      const style = document.getElementById("style").value;
-      if (category && style) {
-        const prompt = 
-`Create a ${category.replace(/_/g, ' ')} ad that highlights ___ by showing how it helps with ___.
-It uses ${style} (...) to engage your audience...`;
-        const promptBox = document.getElementById("promptBox");
-        promptBox.textContent = prompt;
-      }
+    function updatePrompt() {
+      const cat = categorySelect.value;
+      const style = styleSelect.value;
+      const product = productInput.value;
+      const outcome = outcomeInput.value;
+
+      let prompt = `Create a ${cat} ad that highlights`;
+      if (style) prompt = `Create a ${cat} ad that highlights ___ by showing how it helps with ___.\nIt uses ${style} to engage your audience.`;
+      if (product) prompt = `Create a ${cat} ad that highlights ${product} by showing how it helps with ___.\nIt uses ${style} to engage your audience.`;
+      if (outcome) prompt = `Create a ${cat} ad that highlights ${product} by showing how it helps with ${outcome}.\nIt uses ${style} to engage your audience.`;
+
+      promptBox.textContent = prompt;
     }
 
     function copyPrompt() {
-      const text = document.getElementById("promptBox").textContent;
-      navigator.clipboard.writeText(text).then(() => {
-        const msg = document.getElementById("copiedMessage");
-        msg.style.display = "block";
-        setTimeout(() => msg.style.display = "none", 2000);
+      navigator.clipboard.writeText(promptBox.textContent).then(() => {
+        copiedMessage.style.display = 'block';
+        setTimeout(() => copiedMessage.style.display = 'none', 1500);
       });
     }
+
+    function showMore(event) {
+      event.preventDefault();
+      morePrompts.style.display = 'block';
+      const basePrompt = promptBox.textContent;
+      morePrompts.innerHTML = "";
+      for (let i = 1; i <= 9; i++) {
+        const div = document.createElement('div');
+        div.className = 'prompt-variation';
+        div.textContent = basePrompt + ` [v${i}]`;
+        div.onclick = () => {
+          navigator.clipboard.writeText(div.textContent);
+          copiedMessage.style.display = 'block';
+          setTimeout(() => copiedMessage.style.display = 'none', 1500);
+        };
+        morePrompts.appendChild(div);
+      }
+    }
+
+    tierSelect.addEventListener('change', resetAll);
+    categorySelect.addEventListener('change', () => {
+      resetBelow('category');
+      if (categorySelect.value) {
+        styleContainer.style.display = 'block';
+        updatePrompt();
+      }
+    });
+
+    styleSelect.addEventListener('change', () => {
+      resetBelow('style');
+      if (styleSelect.value) {
+        productContainer.style.display = 'block';
+        updatePrompt();
+      }
+    });
+
+    productInput.addEventListener('input', () => {
+      outcomeContainer.style.display = 'block';
+      updatePrompt();
+    });
+
+    outcomeInput.addEventListener('input', () => {
+      updatePrompt();
+      promptBox.style.display = 'block';
+      showMoreLink.style.display = 'block';
+      actionButtons.style.display = 'block';
+    });
   </script>
 </body>
 </html>
