@@ -28,14 +28,30 @@
       border: none;
       font-size: 1rem;
     }
+    .hidden {
+      display: none;
+    }
+    .prompt-box {
+      background: #222;
+      border: 1px solid #444;
+      padding: 15px;
+      margin-top: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      white-space: pre-wrap;
+    }
+    #copiedMessage {
+      color: #00ff88;
+      display: none;
+    }
   </style>
 </head>
 <body>
-  <h1>AutoMoneyKit Prompt Launcher</h1>
+  <h1>AutoMoneyKit<br>Prompt Launcher</h1>
 
   <label>Tier:</label>
-  <select id="tier" onchange="onTierChange()">
-    <option value="">Select a Tier</option>
+  <select id="tier" onchange="resetFields()">
+    <option value="">Select Tier</option>
     <option value="basic">Basic</option>
     <option value="premium">Premium</option>
     <option value="elite">Elite</option>
@@ -43,8 +59,8 @@
   </select>
 
   <label>Category:</label>
-  <select id="category" onchange="onCategoryChange()">
-    <option value="">Select a Category</option>
+  <select id="category" onchange="onCategoryChange()" disabled>
+    <option value="">Select Category</option>
     <option value="viral_hooks">Viral Hooks</option>
     <option value="problem_solution_templates">Problem/Solution Templates</option>
     <option value="sales_copy">Sales Copy</option>
@@ -53,15 +69,18 @@
     <option value="email_openers">Email Openers</option>
   </select>
 
-  <div id="styleContainer" style="display:none;">
+  <div id="styleBlock" class="hidden">
     <label>Style:</label>
-    <select id="style">
-      <option value="">Select a Style</option>
+    <select id="style" onchange="buildPrompt()">
+      <option value="">Select Style</option>
     </select>
   </div>
 
+  <div id="promptBox" class="prompt-box hidden" onclick="copyPrompt()"></div>
+  <p id="copiedMessage">✅ Prompt Copied!</p>
+
   <script>
-    const stylesByCategory = {
+    const styles = {
       viral_hooks: ["shock", "humor", "curiosity", "controversy", "relatable"],
       problem_solution_templates: ["obvious problem", "hidden problem", "aspiration gap", "before/after", "myth busting"],
       sales_copy: ["urgency", "scarcity", "proof", "story", "logic"],
@@ -70,28 +89,58 @@
       email_openers: ["bold question", "pain point", "surprise", "number drop", "short + punchy"]
     };
 
-    function onTierChange() {
+    function resetFields() {
+      document.getElementById("category").disabled = false;
       document.getElementById("category").value = "";
-      document.getElementById("style").innerHTML = '<option value="">Select a Style</option>';
-      document.getElementById("styleContainer").style.display = "none";
+      document.getElementById("styleBlock").classList.add("hidden");
+      document.getElementById("style").innerHTML = '<option value="">Select Style</option>';
+      document.getElementById("promptBox").classList.add("hidden");
+      document.getElementById("promptBox").textContent = "";
     }
 
     function onCategoryChange() {
       const category = document.getElementById("category").value;
       const styleSelect = document.getElementById("style");
-      styleSelect.innerHTML = '<option value="">Select a Style</option>';
 
-      if (stylesByCategory[category]) {
-        stylesByCategory[category].forEach(style => {
+      if (category && styles[category]) {
+        styleSelect.innerHTML = '<option value="">Select Style</option>';
+        styles[category].forEach(style => {
           const opt = document.createElement("option");
           opt.value = style;
           opt.textContent = style.charAt(0).toUpperCase() + style.slice(1);
           styleSelect.appendChild(opt);
         });
-        document.getElementById("styleContainer").style.display = "block";
+        document.getElementById("styleBlock").classList.remove("hidden");
+
+        // Build partial prompt from category
+        const promptBox = document.getElementById("promptBox");
+        promptBox.textContent = `Create a ${category.replace(/_/g, ' ')} ad that highlights ___ by showing how it helps with ___.`;
+        promptBox.classList.remove("hidden");
       } else {
-        document.getElementById("styleContainer").style.display = "none";
+        document.getElementById("styleBlock").classList.add("hidden");
+        document.getElementById("promptBox").classList.add("hidden");
       }
+    }
+
+    function buildPrompt() {
+      const category = document.getElementById("category").value;
+      const style = document.getElementById("style").value;
+      if (category && style) {
+        const prompt = 
+`Create a ${category.replace(/_/g, ' ')} ad that highlights ___ by showing how it helps with ___.
+It uses ${style} (...) to engage your audience...`;
+        const promptBox = document.getElementById("promptBox");
+        promptBox.textContent = prompt;
+      }
+    }
+
+    function copyPrompt() {
+      const text = document.getElementById("promptBox").textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const msg = document.getElementById("copiedMessage");
+        msg.style.display = "block";
+        setTimeout(() => msg.style.display = "none", 2000);
+      });
     }
   </script>
 </body>
