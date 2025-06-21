@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -35,8 +36,8 @@
       margin-top: 20px;
       border-radius: 5px;
       white-space: pre-wrap;
-      cursor: pointer;
       position: relative;
+      cursor: pointer;
     }
     #copiedMessage {
       position: absolute;
@@ -45,227 +46,116 @@
       color: #00ff88;
       display: none;
     }
-    .more-prompts {
-      margin-top: 10px;
+    #morePrompts {
       display: none;
+      margin-top: 15px;
     }
     .prompt-variation {
-      background: #1c1c1c;
+      background: #1b1b1b;
       border: 1px solid #333;
       border-radius: 5px;
       padding: 10px;
       margin-bottom: 10px;
       cursor: pointer;
     }
-    .action-buttons {
+    #actionButtons {
       display: none;
-      margin-top: 15px;
       text-align: center;
+      margin-top: 20px;
     }
-    .action-buttons button {
-      margin: 10px;
-      padding: 10px 15px;
-      border: none;
-      border-radius: 5px;
+    #actionButtons button {
       background: #00ff88;
       color: #111;
       font-weight: bold;
+      padding: 10px 15px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
       cursor: pointer;
     }
-    a {
+    a#showMore {
       color: #00ff88;
       cursor: pointer;
-      display: block;
+      display: none;
       margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>AutoMoneyKit<br>Prompt<br>Launcher</h1>
 
-  <label for="tier">Tier:</label>
-  <select id="tier">
-    <option value="Basic">Basic</option>
-    <option disabled>Premium</option>
-    <option disabled>Elite</option>
-    <option disabled>Master</option>
+<h1>AutoMoneyKit<br>Prompt<br>Launcher</h1>
+
+<label for="tier">Tier:</label>
+<select id="tier">
+  <option value="">Select Tier</option>
+  <option value="Basic">Basic</option>
+  <option value="Premium">Premium</option>
+  <option value="Elite">Elite</option>
+  <option value="Master">Master</option>
+</select>
+
+<label for="category">Category:</label>
+<select id="category" disabled>
+  <option value="">Select Category</option>
+  <option value="viral_hooks">Viral Hooks</option>
+  <option value="problem_solution_templates">Problem/Solution</option>
+  <option value="sales_copy">Sales Copy</option>
+  <option value="tiktok_scripts">TikTok Scripts</option>
+  <option value="instagram_captions">Instagram Captions</option>
+  <option value="email_openers">Email Openers</option>
+</select>
+
+<div id="styleWrapper" style="display:none;">
+  <label for="style">Style:</label>
+  <select id="style">
+    <option value="">Select a Style</option>
   </select>
+</div>
 
-  <label for="category">Category:</label>
-  <select id="category">
-    <option value="">Select a Category</option>
-    <option value="viral_hooks">Viral Hooks</option>
-  </select>
+<div id="step3aWrapper" style="display:none;">
+  <label for="step3a">Step 3a – Product:</label>
+  <input id="step3a" placeholder="e.g. your fitness tracker" />
+</div>
 
-  <div id="style-container" style="display:none;">
-    <label for="style">Style:</label>
-    <select id="style">
-      <option value="">Select a Style</option>
-      <option value="shock">Shock</option>
-      <option value="humor">Humor</option>
-    </select>
-  </div>
+<div id="step3bWrapper" style="display:none;">
+  <label for="step3b">Step 3b – Outcome:</label>
+  <input id="step3b" placeholder="e.g. staying motivated" />
+</div>
 
-  <div id="product-container" style="display:none;">
-    <label for="product">Step 3a – Product:</label>
-    <input id="product" type="text" placeholder="e.g. your fitness tracker" />
-  </div>
+<div id="step3cWrapper" style="display:none;">
+  <label for="step3c">Step 3c – Unique Angle:</label>
+  <input id="step3c" placeholder="e.g. surprise or urgency" />
+</div>
 
-  <div id="outcome-container" style="display:none;">
-    <label for="outcome">Step 3b – Outcome:</label>
-    <input id="outcome" type="text" placeholder="e.g. staying motivated" />
-  </div>
+<div id="step4aWrapper" style="display:none;">
+  <label for="step4a">Step 4a – Visual Outcome:</label>
+  <input id="step4a" placeholder="e.g. watch progress build over time" />
+</div>
 
-  <div id="prompt-box" class="prompt-box" style="display:none;" onclick="copyPrompt()">
-    <span id="copiedMessage">✅ Copied!</span>
-    <span id="promptText"></span>
-  </div>
+<div id="step4bWrapper" style="display:none;">
+  <label for="step4b">Step 4b – Emotion:</label>
+  <input id="step4b" placeholder="e.g. feel confident every step" />
+</div>
 
-  <a id="showMoreLink" onclick="showMore()" style="display:none;">Show More</a>
-  <div class="more-prompts" id="morePrompts"></div>
+<div id="step5cWrapper" style="display:none;">
+  <label for="step5c">Step 5c – Dopamine CTA:</label>
+  <input id="step5c" placeholder="e.g. Tap now to feel the shift" />
+</div>
 
-  <div class="action-buttons" id="actionButtons">
-    <button onclick="window.open('https://chat.openai.com/', '_blank')">ChatGPT</button>
-    <button onclick="window.open('https://claude.ai/', '_blank')">Claude</button>
-  </div>
+<div id="promptBox" class="prompt-box" style="display:none;" onclick="copyPrompt()">
+  <span id="copiedMessage">✅ Copied!</span>
+  <span id="promptText"></span>
+</div>
 
-  <script>
-    let promptData = {};
-    let currentPrompt = '';
-    const tierSelect = document.getElementById('tier');
-    const categorySelect = document.getElementById('category');
-    const styleSelect = document.getElementById('style');
-    const productInput = document.getElementById('product');
-    const outcomeInput = document.getElementById('outcome');
-    const styleContainer = document.getElementById('style-container');
-    const productContainer = document.getElementById('product-container');
-    const outcomeContainer = document.getElementById('outcome-container');
-    const promptBox = document.getElementById('prompt-box');
-    const promptText = document.getElementById('promptText');
-    const copiedMessage = document.getElementById('copiedMessage');
-    const showMoreLink = document.getElementById('showMoreLink');
-    const morePrompts = document.getElementById('morePrompts');
-    const actionButtons = document.getElementById('actionButtons');
+<a id="showMore" onclick="showMore()">Show More</a>
+<div id="morePrompts"></div>
 
-    fetch('https://automoneykit.github.io/Automoneykit/automoneykit_cat1_basic.json')
-      .then(res => res.json())
-      .then(data => { promptData = data; });
+<div id="actionButtons">
+  <button onclick="window.open('https://chat.openai.com/', '_blank')">ChatGPT</button>
+  <button onclick="window.open('https://claude.ai/', '_blank')">Claude</button>
+</div>
 
-    function resetUI(from) {
-      if (from === 'category') {
-        styleSelect.selectedIndex = 0;
-        styleContainer.style.display = 'none';
-      }
-      if (from === 'style' || from === 'category') {
-        productInput.value = '';
-        productContainer.style.display = 'none';
-      }
-      if (from !== 'outcome') {
-        outcomeInput.value = '';
-        outcomeContainer.style.display = 'none';
-      }
-      currentPrompt = '';
-      promptBox.style.display = 'none';
-      promptText.textContent = '';
-      copiedMessage.style.display = 'none';
-      showMoreLink.style.display = 'none';
-      morePrompts.style.display = 'none';
-      morePrompts.innerHTML = '';
-      actionButtons.style.display = 'none';
-    }
+<script src="launcher_logic.js"></script>
 
-    function typeEffect(text) {
-      promptText.textContent = '';
-      let i = 0;
-      clearInterval(window.promptInterval);
-      window.promptInterval = setInterval(() => {
-        if (i < text.length) {
-          promptText.textContent += text.charAt(i);
-          i++;
-        } else {
-          clearInterval(window.promptInterval);
-        }
-      }, 16);
-    }
-
-    function buildPrompt(template) {
-      const product = productInput.value.trim();
-      const outcome = outcomeInput.value.trim();
-      return template
-        .replace('[Step 3a – PRODUCT]', product)
-        .replace('[Step 3b – OUTCOME]', outcome);
-    }
-
-    function showMore() {
-      const prompts = getPromptSet();
-      morePrompts.innerHTML = '';
-      prompts.slice(1).forEach((template, index) => {
-        const div = document.createElement('div');
-        div.className = 'prompt-variation';
-        div.textContent = buildPrompt(template);
-        div.onclick = () => {
-          navigator.clipboard.writeText(div.textContent).then(() => {
-            copiedMessage.style.display = 'block';
-            setTimeout(() => copiedMessage.style.display = 'none', 1500);
-          });
-        };
-        morePrompts.appendChild(div);
-      });
-      morePrompts.style.display = 'block';
-    }
-
-    function getPromptSet() {
-      const cat = categorySelect.value;
-      const style = styleSelect.value;
-      return promptData?.[cat]?.[style]?.basic || [];
-    }
-
-    function updatePrompt() {
-      const prompts = getPromptSet();
-      if (prompts.length === 0) return;
-
-      const mainPrompt = buildPrompt(prompts[0]);
-      typeEffect(mainPrompt);
-      promptBox.style.display = 'block';
-      currentPrompt = mainPrompt;
-
-      if (productInput.value && outcomeInput.value) {
-        showMoreLink.style.display = 'block';
-        actionButtons.style.display = 'block';
-      } else {
-        showMoreLink.style.display = 'none';
-        actionButtons.style.display = 'none';
-      }
-    }
-
-    function copyPrompt() {
-      navigator.clipboard.writeText(promptText.textContent).then(() => {
-        copiedMessage.style.display = 'block';
-        setTimeout(() => copiedMessage.style.display = 'none', 1500);
-      });
-    }
-
-    tierSelect.addEventListener('change', () => resetUI('category'));
-    categorySelect.addEventListener('change', () => {
-      resetUI('category');
-      if (categorySelect.value) {
-        styleContainer.style.display = 'block';
-        promptBox.style.display = 'block';
-        typeEffect(`Create a ${categorySelect.value.replace('_', ' ')} ad that highlights`);
-      }
-    });
-    styleSelect.addEventListener('change', () => {
-      resetUI('style');
-      if (styleSelect.value) {
-        productContainer.style.display = 'block';
-        updatePrompt();
-      }
-    });
-    productInput.addEventListener('input', () => {
-      outcomeContainer.style.display = 'block';
-      updatePrompt();
-    });
-    outcomeInput.addEventListener('input', updatePrompt);
-  </script>
 </body>
 </html>
